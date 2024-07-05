@@ -1,13 +1,9 @@
 import React from 'react';
-import {useFetch} from "../src";
+import UseFetch from "./components/UseFetch";
 
 const App: React.FC = () => {
-    const result = useFetch();
-
     return (
-        <div>
-            <h1>Fetch: {result}</h1>
-        </div>
+        <UseFetch/>
     );
 };
 
