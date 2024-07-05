@@ -8,9 +8,9 @@
         "esModuleInterop": true,
         "jsx": "react",
         "declaration": true,
-        "declarationDir": "dist",
+        "declarationDir": "dist/dts",
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "dist/dts",
         "strict": true
     },
     "include": ["src"],

@@ -4,8 +4,10 @@ import typescript from '@rollup/plugin-typescript';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy';
+import dts from 'rollup-plugin-dts';
+import del from "rollup-plugin-delete";
 
-export default {
+export default [{
     input: 'src/index.ts',
     output: [
         {
@@ -33,4 +35,11 @@ export default {
         })
     ],
     external: ['react', 'react-dom'],
-};
+}, {
+    input: './dist/dts/index.d.ts',
+    output: [{ file: 'dist/index.d.ts', format: 'es' }],
+    plugins: [
+        dts(),
+        del({ hook: "buildEnd", targets: "./dist/dts" })
+    ]
+}];
