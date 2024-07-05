@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import terser from '@rollup/plugin-terser';
+import copy from 'rollup-plugin-copy';
 
 export default {
     input: 'src/index.ts',
@@ -10,12 +11,12 @@ export default {
         {
             file: 'dist/index.cjs.js',
             format: 'cjs',
-            sourcemap: true,
+            sourcemap: true
         },
         {
             file: 'dist/index.esm.js',
             format: 'esm',
-            sourcemap: true,
+            sourcemap: true
         },
     ],
     plugins: [
@@ -24,6 +25,12 @@ export default {
         commonjs(),
         typescript({ tsconfig: './tsconfig.json' }),
         terser(),
+        copy({
+            targets: [
+                { src: 'package.json', dest: 'dist' },
+                { src: 'LICENSE', dest: 'dist' }
+            ],
+        })
     ],
     external: ['react', 'react-dom'],
 };
