@@ -149,7 +149,7 @@ test('should fetch and parse text', async () => {
     postFetchAssertions(result);
 });
 
-test('should fetch and parse text', async () => {
+test('should fetch and not parse when parse type is invalid', async () => {
     const mockData = "<root><info>very interesting</info></root>";
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
