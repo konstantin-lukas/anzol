@@ -1,10 +1,10 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
-    collectCoverage: true,
     coverageDirectory: "coverage",
+    coverageProvider: "v8",
     coverageReporters: ["html", "text"],
-    testMatch: ["**/tests/*.test.ts"],
+    collectCoverageFrom: ["**/src/hooks/*.ts"],
     verbose: true,
     bail: 1
 };

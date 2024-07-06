@@ -1,5 +1,5 @@
 import {act, renderHook, waitFor} from "@testing-library/react";
-import useDefer from "../src/hooks/useDefer";
+import {useDefer} from "../src";
 
 test('should defer the updating of a value', async () => {
     const { result, rerender } = await act(async () => {
