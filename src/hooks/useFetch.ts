@@ -1,24 +1,24 @@
 import {useEffect, useState} from "react";
 
 /**
- * @type {Object} FetchResult
- * @property {any} data - The response to the fetch request. Type depends on selected parseType. Is null if fetch was
- * unsuccessful
- * @property {boolean} loading - Indicates if the fetch is still ongoing (i.e. has not finished). Wait for this to be
- * true before reading other fields. Can be used to display a spinner while waiting for results.
- * @property {boolean} ok - Whether the response was successful (status in the range 200-299) or not.
- * @property {number} status - The HTTP status code. Is null before first fetch has completed.
+ * Contains information about the result of a fetch request made by useFetch.
  */
-type FetchResult = {
+export type FetchResult = {
+    /** The response to the fetch request. Type depends on selected parseType. Is null if fetch was. */
     data: any,
+    /** Indicates if the fetch is still ongoing (i.e. has not finished). Wait for this to be true before reading other
+     * fields. Is useful to display a spinner while waiting for results. */
     loading: boolean,
+    /** Indicates whether the response was successful (status in the range 200-299) or not. */
     ok: boolean,
+    /** The HTTP status code. Is null before first fetch has completed. */
     status: number | null
 }
 
 /**
- * @description Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
+ * Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
  * started before the previous has finished to prevent flickering of stale responses by default.
+ *
  * @param url The resource to fetch
  * @param parseType How to parse the result (determines type of returned data). Set to "response" if you don't want to
  * extract the data automatically and receive the response object instead. Defaults to "json".
@@ -26,7 +26,29 @@ type FetchResult = {
  * @param discardStaleRequests Discards all responses except the last one made when set to true (default). This prevents
  * flickering of data in the UI and ensures only the correct data is displayed. Only turn this off if you're really sure
  * you want to.
+ *
  * @return FetchResult
+ *
+ * @example
+ * ```ts
+ * const Component = () => {
+ *     const [value, setValue] = useState("");
+ *     const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));
+ *     const list = data?.data.map((e, i) => <li key={i}>{e.title}</li>)
+ *     return (
+ *         <div>
+ *             <input
+ *                 type="text"
+ *                 value={value}
+ *                 onInput={(e) => setValue((e.target as HTMLInputElement).value)}
+ *             />
+ *             <ul>
+ *                 {loading ? "LOADING..." : list}
+ *             </ul>
+ *         </div>
+ *     );
+ * };
+ * ```
  */
 const useFetch = (
     url: string,

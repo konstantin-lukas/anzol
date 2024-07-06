@@ -1,0 +1,6 @@
+{
+    "out": "docs",
+    "entryPoints": ["src/index.ts"],
+    "exclude": ["node_modules", "**/*spec.ts", "**/*test.ts", "examples", "dist", "tests"],
+    "readme": "README.md"
+}

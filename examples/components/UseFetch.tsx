@@ -3,7 +3,7 @@ import {useFetch} from "../../src";
 
 const UseFetch = () => {
     const [value, setValue] = useState("");
-    const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + value);
+    const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));
     const list = data?.data.map((e, i) => <li key={i}>{e.title}</li>)
     return (
         <div>

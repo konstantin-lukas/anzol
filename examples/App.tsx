@@ -1,9 +1,9 @@
 import React from 'react';
-import UseFetch from "./components/UseFetch";
+import UseDefer from "./components/UseDefer";
 
 const App: React.FC = () => {
     return (
-        <UseFetch/>
+        <UseDefer/>
     );
 };
 
