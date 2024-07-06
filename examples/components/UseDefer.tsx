@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useDefer} from "../../src";
+import useDefer from "../../src/hooks/useDefer";
 
 const UseDefer = () => {
     const [value, setValue] = useState("");

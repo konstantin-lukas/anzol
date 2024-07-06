@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useFetch} from "../../src";
+import useFetch from "../../src/hooks/useFetch";
 
 const UseFetch = () => {
     const [value, setValue] = useState("");
