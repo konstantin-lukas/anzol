@@ -1,5 +1,3 @@
-# Anzol
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/anzol_logo_white.svg">
