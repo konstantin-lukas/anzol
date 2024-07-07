@@ -3,7 +3,6 @@ module.exports = {
     testEnvironment: 'jsdom',
     coverageDirectory: "coverage",
     coverageProvider: "v8",
-    coverageReporters: ["html", "text"],
     collectCoverageFrom: ["**/src/hooks/*.ts"],
     verbose: true,
     bail: 1
