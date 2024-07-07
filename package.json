@@ -1,9 +1,9 @@
 {
   "name": "anzol",
   "version": "1.0.4",
-  "main": "index.cjs.js",
-  "module": "index.esm.js",
-  "types": "index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "description": "A react hooks library.",
   "scripts": {
     "build": "rollup -c",
