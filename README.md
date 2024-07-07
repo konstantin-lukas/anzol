@@ -5,8 +5,10 @@
     <img src="assets/anzol_logo_blue_clear_zone.svg" alt="Logo" width="50%" height="50%">
   </picture>
 
-  [![MIT License](https://img.shields.io/github/license/konstantin-lukas/intl-currency-input?style=flat-square)](https://raw.githubusercontent.com/konstantin-lukas/intl-currency-input/main/LICENSE)
-  ![Type Definitions](https://img.shields.io/npm/types/intl-currency-input?style=flat-square)
+[![NPM Package](https://img.shields.io/npm/v/anzol?style=flat-square&logo=npm)](https://www.npmjs.com/package/anzol)
+[![MIT License](https://img.shields.io/github/license/konstantin-lukas/intl-currency-input?style=flat-square)](https://raw.githubusercontent.com/konstantin-lukas/intl-currency-input/main/LICENSE)
+![Type Definitions](https://img.shields.io/npm/types/intl-currency-input?style=flat-square)
+![Bundle Size](https://img.shields.io/bundlephobia/min/anzol?style=flat-square)
 </div>
 
 
