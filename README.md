@@ -14,8 +14,9 @@
 
 
 Anzol provides very useful React hooks for very common tasks such as data fetching
-or deferring the updating of values with a custom timeout. You can find working examples in the documentation or if
-you just want the code in the examples/components directory.
+or deferring the updating of values with a custom timeout. You can find working examples in the 
+[documentation](https://konstantin-lukas.github.io/anzol/) or if you just want the code in the examples/components 
+directory.
 
 Anzol is built alongside automated tests to ensure quality.
 
