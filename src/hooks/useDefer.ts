@@ -30,7 +30,7 @@ import {useEffect, useState} from "react";
  * ```
  */
 const useDefer = (input: any, delay: number) => {
-    const [state, setState] = useState(null);
+    const [state, setState] = useState(input);
     const [timeoutState, setTimeoutState] = useState<null | NodeJS.Timeout>(null);
     useEffect(() => {
         if (timeoutState) {

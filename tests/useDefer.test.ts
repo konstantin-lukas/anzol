@@ -11,9 +11,9 @@ test('should defer the updating of a value', async () => {
 
     rerender("numberTwo");
 
-    expect(result.current).toBe(null);
+    expect(result.current).toBe("numberOne");
     await waitFor(() => {
-        expect(result.current).not.toBe(null);
+        expect(result.current).not.toBe("numberOne");
     });
     expect(result.current).toBe("numberTwo");
 
