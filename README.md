@@ -12,4 +12,11 @@
 
 
 Anzol provides very useful React hooks for very common tasks such as data fetching
-or deferring the updating of values.
+or deferring the updating of values with a custom timeout. You can find working examples in the documentation or if
+you just want the code in the examples/components directory.
+
+Anzol is built alongside automated tests to ensure quality.
+
+## Currently Available Hooks
+- <b>useFetch:</b> fetch data without showing stale responses and write easy to understand code that communicates intention
+- <b>useDefer:</b> delay the update of a value until that value has stopped changing for a chosen amount of time
