@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
  * Contains information about the result of a fetch request made by useFetch.
  */
 export type FetchResult = {
-    /** The response to the fetch request. Type depends on selected parseType. Is null if fetch was. */
+    /** The response to the fetch request. Type depends on selected parseType. Is null if fetch was unsuccessful. */
     data: any,
     /** Indicates if the fetch is still ongoing (i.e. has not finished). Wait for this to be true before reading other
      * fields. Is useful to display a spinner while waiting for results. */
