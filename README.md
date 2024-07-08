@@ -37,17 +37,17 @@ These features are not yet implement but we plan to do so in the foreseeable fut
 suggestions.
 - <b>useFirstRender:</b> Returns true on the first render and false otherwise.
 - <b>useClickOutside:</b> Takes a reference to an HTML element and a callback function, and calls that function when the 
-- user clicks anywhere outside the given element.
+user clicks anywhere outside the given element.
 - <b>useLocalStorage:</b> Provides access to local storage, with the additional option to update all usages of this hook 
-- when local storage changes.
+when local storage changes.
 - <b>useEvent:</b> Encapsulates the code needed to correctly listen to events in React, including event listener 
-- cleanup.
+cleanup.
 - <b>useInView:</b> Takes a reference to an HTML element and returns whether that element's bounding client rectangle is 
-- currently in view. You can choose if this hook tests for an element being completely or only partially in view.
+currently in view. You can choose if this hook tests for an element being completely or only partially in view.
 - <b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.
 - <b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically 
-- updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
+updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
 - <b>useLazyLoad:</b> Takes a batch size and a max element count, and provides a function to add elements. Allows you to 
-- pass in a callback function to transform elements. The hook keeps track of the elements and returns a transformed list 
-- of all elements, as well as a flag indicating whether the end of content was reached. This flag will be set to true 
-- when the given max element count is reached or an added batch is shorter than the batch size.
+pass in a callback function to transform elements. The hook keeps track of the elements and returns a transformed list 
+of all elements, as well as a flag indicating whether the end of content was reached. This flag will be set to true 
+when the given max element count is reached or an added batch is shorter than the batch size.
