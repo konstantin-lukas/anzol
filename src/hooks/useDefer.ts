@@ -11,7 +11,7 @@ import {useEffect, useState} from "react";
  *
  * @example
  * ```ts
- * const Component = () => {
+ * const DemoUseDefer = () => {
  *     const [value, setValue] = useState("");
  *     const displayValue = useDefer(value, 500);
  *     return (

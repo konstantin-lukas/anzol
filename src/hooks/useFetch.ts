@@ -20,10 +20,10 @@ export type FetchResult = {
  * started before the previous has finished to prevent flickering of stale responses by default.
  *
  * @param url The resource to fetch
- * @param parseType How to parse the result (determines type of returned data). Set to "response" if you don't want to
- * extract the data automatically and receive the response object instead. Defaults to "json".
- * @param options The options passed to the fetch function. Note: custom signals will be overwritten internally.
- * @param discardStaleRequests Discards all responses except the last one made when set to true (default). This prevents
+ * @param [parseType = 'json'] How to parse the result (determines type of returned data). Set to "response" if you
+ * don't want to extract the data automatically and receive the response object instead.
+ * @param [options = {}] The options passed to the fetch function. Note: custom signals will be overwritten internally.
+ * @param [discardStaleRequests = true] Discards all responses except the last one made. This prevents
  * flickering of data in the UI and ensures only the correct data is displayed. Only turn this off if you're really sure
  * you want to.
  *
@@ -31,7 +31,7 @@ export type FetchResult = {
  *
  * @example
  * ```ts
- * const Component = () => {
+ * const DemoUseFetch = () => {
  *     const [value, setValue] = useState("");
  *     const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));
  *     const list = data?.data.map((e, i) => <li key={i}>{e.title}</li>)

@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import useDefer from "../../src/hooks/useDefer";
+import useFetch from "../../src/hooks/useFetch";
 
-const UseDefer = () => {
+const DemoUseFetch = () => {
     const [value, setValue] = useState("");
-    const displayValue = useDefer(value, 500);
+    const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));
+    const list = data?.data.map((e, i) => <li key={i}>{e.title}</li>)
     return (
         <div>
             <input
@@ -12,10 +13,10 @@ const UseDefer = () => {
                 onInput={(e) => setValue((e.target as HTMLInputElement).value)}
             />
             <ul>
-                {displayValue}
+                {loading ? "LOADING..." : list}
             </ul>
         </div>
     );
 };
 
-export default UseDefer;
+export default DemoUseFetch;

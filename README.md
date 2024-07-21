@@ -25,6 +25,8 @@ Anzol is built alongside automated tests to ensure quality.
 - <b>useFetch:</b> Fetches data without showing stale responses and allows writing easy-to-understand code that 
 - communicates intention.
 - <b>useDefer:</b> Delays the update of a value until that value has stopped changing for a chosen amount of time.
+- <b>useFirstRender:</b> Returns true on the first render and false otherwise.
+- <b>useToggle:</b> Provides a simple boolean toggle that does not persist between page reloads.
 
 ## Installation
 Anzol is available on the NPM registry. To install it, just run:
@@ -35,7 +37,6 @@ npm install anzol
 ## Planned features
 These features are not yet implement but we plan to do so in the foreseeable future. Feel free to make your own 
 suggestions.
-- <b>useFirstRender:</b> Returns true on the first render and false otherwise.
 - <b>useClickOutside:</b> Takes a reference to an HTML element and a callback function, and calls that function when the 
 user clicks anywhere outside the given element.
 - <b>useLocalStorage:</b> Provides access to local storage, with the additional option to update all usages of this hook 

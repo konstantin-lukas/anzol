@@ -1,9 +1,9 @@
 import React from 'react';
-import UseDefer from "./components/UseDefer";
+import DemoUseFirstRender from "./components/demoUseFirstRender";
 
 const App: React.FC = () => {
     return (
-        <UseDefer/>
+        <DemoUseFirstRender/>
     );
 };
 
