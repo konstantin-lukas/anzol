@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 
 export type FetchResult = {
     /** The response to the fetch request. Type depends on selected parseType. Is undefined if fetch was unsuccessful. */
@@ -24,8 +24,9 @@ export type FetchOptions = {
     discardStaleRequests?: boolean,
     /** A callback function that takes the number of attempted retries and returns the amount of seconds to wait before
      * attempting to fetch again. A common retry method would return 2^(attempt). If set to undefined, does not attempt
-     * to re-fetch on failure. */
-    retryTimeout?: (attempt: number) => number,
+     * to re-fetch on failure. If the function returns undefined, it stops the hook from re-fetching again until an
+     * input parameter to the hook changes and resets the internal retry counter.*/
+    retryTimeout?: (attempt: number) => number | undefined,
 };
 
 /**
@@ -73,6 +74,10 @@ const useFetch = (
     const [retries, setRetries] = useState(1);
 
     useEffect(() => {
+        setRetries(1);
+    }, [url, parseType, discardStaleRequests, retryTimeout]);
+
+    useEffect(() => {
         const abortController = new AbortController();
         const { signal } = abortController;
         (async () => {
@@ -91,12 +96,11 @@ const useFetch = (
                     } else if (parseType === "html" || parseType === "xml" || parseType === "svg") {
                         const html = await response.text();
                         const parser = new DOMParser();
-                        const doc = parser.parseFromString(html,
+                        res = parser.parseFromString(html,
                             parseType === "html" ? "text/html" :
                                 parseType === "svg" ? "image/svg+xml" :
                                     "text/xml"
                         );
-                        res = doc;
                     } else if (parseType === "text") {
                         res = await response.text();
                     } else {
@@ -106,7 +110,9 @@ const useFetch = (
                     }
                 } else if (typeof retryTimeout === "function") {
                     const timeoutLength = retryTimeout(retries);
-                    setTimeout(() => setRetries(prevState => prevState + 1), timeoutLength);
+                    if (typeof timeoutLength === "number") {
+                        setTimeout(() => setRetries(prevState => prevState + 1), timeoutLength);
+                    }
                 }
                 setData(res);
             } catch { } finally {
@@ -118,7 +124,7 @@ const useFetch = (
                 abortController.abort();
             };
         }
-    }, [url, parseType, retries]);
+    }, [url, parseType, retries, discardStaleRequests, retryTimeout]);
     return {data, loading, ok, status};
 };
 

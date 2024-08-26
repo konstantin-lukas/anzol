@@ -355,10 +355,11 @@ test('should attempt to retry if given a timeout function', async () => {
 
     preFetchAssertions(result);
     await waitFor(() => {
-        expect(retryTimeout).toHaveBeenCalledTimes(2);
-        expect(global.fetch).toHaveBeenCalledTimes(2);
+        expect(retryTimeout).toHaveBeenCalledTimes(20);
     });
-    expect(retryTimeout).toHaveBeenLastCalledWith(2);
+    await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledTimes(21);
+    });
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
@@ -371,4 +372,48 @@ test('should attempt to retry if given a timeout function', async () => {
     });
     expect(result.current.ok).toBe(true);
     expect(result.current.status).toEqual(200);
+});
+
+test('should attempt to retry only a limited amount of times', async () => {
+    global.fetch = jest.fn(async () => {
+        await new Promise((r) => setTimeout(r, 0));
+        return Promise.resolve({
+            ok: false,
+            status: 404
+        });
+    }) as jest.Mock;
+
+    const retryTimeout = jest.fn((attempt: number) => {
+        if (attempt < 5) return attempt;
+    });
+
+    const retryTimeoutNoLimit = jest.fn((attempt: number) => {
+        return attempt;
+    });
+
+    const { result, rerender } = await act(async () => {
+        // @ts-ignore
+        return renderHook((retryMethod) => useFetch(
+            "/api",
+            {
+                retryTimeout: retryMethod,
+            },
+        ), {
+            initialProps: retryTimeout
+        });
+    });
+
+    preFetchAssertions(result);
+    await waitFor(() => {
+        expect(retryTimeout).toHaveBeenCalledTimes(5);
+    });
+    expect(retryTimeout).not.toHaveBeenCalledTimes(6);
+
+    expect(retryTimeoutNoLimit).toHaveBeenCalledTimes(0);
+    await act(async () => {
+        rerender(retryTimeoutNoLimit);
+    });
+    await waitFor(() => {
+        expect(retryTimeoutNoLimit).not.toHaveBeenCalledTimes(0);
+    });
 });
