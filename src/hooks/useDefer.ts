@@ -31,11 +31,11 @@ import {useEffect, useState} from "react";
  */
 const useDefer = <T = any>(input: T, delay: number): T => {
     const [state, setState] = useState(input);
-    const [timeoutState, setTimeoutState] = useState<null | NodeJS.Timeout>(null);
+    const [timeoutState, setTimeoutState] = useState<NodeJS.Timeout | undefined>(undefined);
     useEffect(() => {
         if (timeoutState) {
             clearTimeout(timeoutState);
-            setTimeoutState(null);
+            setTimeoutState(undefined);
         }
         setTimeoutState(setTimeout(() => {
             setState(input);

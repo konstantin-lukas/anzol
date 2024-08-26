@@ -1,33 +1,40 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
-/**
- * Contains information about the result of a fetch request made by useFetch.
- */
 export type FetchResult = {
-    /** The response to the fetch request. Type depends on selected parseType. Is null if fetch was unsuccessful. */
+    /** The response to the fetch request. Type depends on selected parseType. Is undefined if fetch was unsuccessful. */
     data: any,
     /** Indicates if the fetch is still ongoing (i.e. has not finished). Wait for this to be true before reading other
      * fields. Is useful to display a spinner while waiting for results. */
     loading: boolean,
     /** Indicates whether the response was successful (status in the range 200-299) or not. */
     ok: boolean,
-    /** The HTTP status code. Is null before first fetch has completed. */
-    status: number | null
-}
+    /** The HTTP status code. Is undefined before first fetch has completed. */
+    status: number | undefined
+};
+
+export type FetchOptions = {
+    /** How to parse the result (determines type of returned data). Set to "response" if you
+     * don't want to extract the data automatically and receive the response object instead. */
+    parseType?: "json" | "html" | "xml" | "text" | "svg" | "response",
+    /** The options passed to the fetch function. Note: custom signals will be overwritten internally. */
+    requestOptions?: RequestInit,
+    /** Discards all responses except the last one made. This prevents
+     * flickering of data in the UI and ensures only the correct data is displayed. Only turn this off if you're really
+     * sure you want to. */
+    discardStaleRequests?: boolean,
+    /** A callback function that takes the number of attempted retries and returns the amount of seconds to wait before
+     * attempting to fetch again. A common retry method would return 2^(attempt). If set to undefined, does not attempt
+     * to re-fetch on failure. */
+    retryTimeout?: (attempt: number) => number,
+};
 
 /**
  * Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
  * started before the previous has finished to prevent flickering of stale responses by default.
  *
- * @param url The resource to fetch
- * @param [parseType = 'json'] How to parse the result (determines type of returned data). Set to "response" if you
- * don't want to extract the data automatically and receive the response object instead.
- * @param [options = {}] The options passed to the fetch function. Note: custom signals will be overwritten internally.
- * @param [discardStaleRequests = true] Discards all responses except the last one made. This prevents
- * flickering of data in the UI and ensures only the correct data is displayed. Only turn this off if you're really sure
- * you want to.
- *
- * @return FetchResult
+ * @param url - The resource to fetch
+ * @param {FetchOptions} options - Allows you to configure how useFetch makes and returns requests
+ * @return FetchResult - An object containing information about the result of a fetch request
  *
  * @example
  * ```ts
@@ -52,14 +59,18 @@ export type FetchResult = {
  */
 const useFetch = (
     url: string,
-    parseType: "json" | "html" | "xml" | "text" | "svg" | "response" = "json",
-    options: RequestInit = {},
-    discardStaleRequests = true
+    {
+        parseType = "json",
+        requestOptions = {},
+        discardStaleRequests = true,
+        retryTimeout = undefined,
+    }: FetchOptions = {},
 ): FetchResult => {
-    const [status, setStatus] = useState<number | null>(null);
+    const [status, setStatus] = useState<number>();
     const [ok, setOk] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<any>(undefined);
+    const [retries, setRetries] = useState(1);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -67,14 +78,16 @@ const useFetch = (
         (async () => {
             setLoading(true);
             try {
-                const response = await fetch(url, discardStaleRequests ? { ...options, signal } : options);
+                const response = await fetch(url, discardStaleRequests
+                    ? { ...requestOptions, signal }
+                    : requestOptions
+                );
                 setStatus(response.status);
                 setOk(response.ok);
-                if (!response.ok) {
-                    setData(null);
-                } else {
+                let res = undefined;
+                if (response.ok) {
                     if (parseType === "json") {
-                        setData(await response.json());
+                        res = await response.json();
                     } else if (parseType === "html" || parseType === "xml" || parseType === "svg") {
                         const html = await response.text();
                         const parser = new DOMParser();
@@ -83,15 +96,19 @@ const useFetch = (
                                 parseType === "svg" ? "image/svg+xml" :
                                     "text/xml"
                         );
-                        setData(doc);
+                        res = doc;
                     } else if (parseType === "text") {
-                        setData(await response.text());
+                        res = await response.text();
                     } else {
                         if (parseType !== "response")
                             console.error("Unknown parse type: '" + parseType + "'\nReturned 'response' instead.");
-                        setData(response);
+                        res = response;
                     }
+                } else if (typeof retryTimeout === "function") {
+                    const timeoutLength = retryTimeout(retries);
+                    setTimeout(() => setRetries(prevState => prevState + 1), timeoutLength);
                 }
+                setData(res);
             } catch { } finally {
                 setLoading(false);
             }
@@ -101,7 +118,7 @@ const useFetch = (
                 abortController.abort();
             };
         }
-    }, [url, parseType]);
+    }, [url, parseType, retries]);
     return {data, loading, ok, status};
 };
 

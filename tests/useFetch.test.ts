@@ -6,10 +6,10 @@ beforeEach(() => {
 });
 
 function preFetchAssertions(result: any) {
-    expect(result.current.data).toEqual(null);
+    expect(result.current.data).toEqual(undefined);
     expect(result.current.loading).toBe(true);
     expect(result.current.ok).toBe(false);
-    expect(result.current.status).toEqual(null);
+    expect(result.current.status).toEqual(undefined);
 }
 
 function postFetchAssertions(result: any) {
@@ -55,7 +55,9 @@ test('should fetch and parse html', async () => {
 
     const {result} = await act(() => renderHook(() => useFetch(
         "/api",
-        "html"
+        {
+            parseType: "html"
+        }
     )));
 
 
@@ -85,7 +87,9 @@ test('should fetch and parse svg', async () => {
 
     const {result} = await act(() => renderHook(() => useFetch(
         "/api",
-        "svg"
+        {
+            parseType: "svg"
+        }
     )));
 
 
@@ -111,7 +115,9 @@ test('should fetch and parse xml', async () => {
 
     const {result} = await act(() => renderHook(() => useFetch(
         "/api",
-        "xml"
+        {
+            parseType: "xml"
+        }
     )));
 
 
@@ -137,7 +143,9 @@ test('should fetch and parse text', async () => {
 
     const {result} = await act(() => renderHook(() => useFetch(
         "/api",
-        "text"
+        {
+            parseType: "text"
+        }
     )));
 
     preFetchAssertions(result);
@@ -164,7 +172,9 @@ test('should fetch and not parse when parse type is invalid', async () => {
 
     const {result} = await act(() => renderHook(() => useFetch(
         "/api",
-        "svf" as "svg"
+        {
+            parseType: "svf" as "svg"
+        }
     )));
 
     preFetchAssertions(result);
@@ -193,7 +203,9 @@ test('should fetch and not parse the response', async () => {
 
     const {result} = await act(() => renderHook(() => useFetch(
         "/api",
-        "response"
+        {
+            parseType: "response"
+        }
     )));
 
     preFetchAssertions(result);
@@ -275,23 +287,30 @@ test('should not discard stale requests when asked to do so', async () => {
 
     const { result, rerender } = await act(async () => {
         // @ts-ignore
-        return renderHook((url: string) => useFetch(url, "json", {}, false), {
+        return renderHook((url: string) => useFetch(url, {
+            discardStaleRequests: false,
+        }), {
             initialProps: firstUrl
         });
     });
 
     preFetchAssertions(result);
 
-    rerender(secondUrl);
-
-    await new Promise((r) => setTimeout(r, 200));
-    await waitFor(() => {
-        expect(result.current.loading).toBe(false);
+    await act(async () => {
+        rerender(secondUrl);
     });
-    expect(result.current.data).toEqual(mockData1);
-    expect(result.current.ok).toBe(true);
-    expect(result.current.status).toEqual(200);
-    expect(global.fetch).toHaveBeenCalledTimes(2);
+
+    await waitFor(() => {
+        expect(result.current.data).toEqual(mockData2);
+    });
+
+    await act(async () => {
+        await new Promise((r) => setTimeout(r, 200));
+    });
+
+    await waitFor(() => {
+        expect(result.current.data).toEqual(mockData1);
+    });
 });
 
 test('should return no data on error', async () => {
@@ -311,8 +330,45 @@ test('should return no data on error', async () => {
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
-    expect(result.current.data).toEqual(null);
+    expect(result.current.data).toEqual(undefined);
     expect(result.current.ok).toBe(false);
     expect(result.current.status).toEqual(404);
     expect(global.fetch).toHaveBeenCalledTimes(1);
+});
+
+test('should attempt to retry if given a timeout function', async () => {
+    global.fetch = jest.fn(async () => {
+        await new Promise((r) => setTimeout(r, 0));
+        return Promise.resolve({
+            ok: false,
+            status: 404
+        });
+    }) as jest.Mock;
+
+    const retryTimeout = jest.fn((attempt: number) => attempt);
+    const {result} = await act(() => renderHook(() => useFetch(
+        "/api",
+        {
+            retryTimeout
+        },
+    )));
+
+    preFetchAssertions(result);
+    await waitFor(() => {
+        expect(retryTimeout).toHaveBeenCalledTimes(2);
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+    expect(retryTimeout).toHaveBeenLastCalledWith(2);
+    global.fetch = jest.fn(async () => {
+        await new Promise((r) => setTimeout(r, 0));
+        return Promise.resolve({
+            ok: true,
+            status: 200
+        });
+    }) as jest.Mock;
+    await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+    expect(result.current.ok).toBe(true);
+    expect(result.current.status).toEqual(200);
 });
