@@ -355,11 +355,9 @@ test('should attempt to retry if given a timeout function', async () => {
 
     preFetchAssertions(result);
     await waitFor(() => {
-        expect(retryTimeout).toHaveBeenCalledTimes(20);
+        expect(retryTimeout).toHaveBeenNthCalledWith(20, 20);
     });
-    await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledTimes(21);
-    });
+
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
@@ -405,9 +403,11 @@ test('should attempt to retry only a limited amount of times', async () => {
 
     preFetchAssertions(result);
     await waitFor(() => {
-        expect(retryTimeout).toHaveBeenCalledTimes(5);
+        expect(retryTimeout).toHaveBeenNthCalledWith(5, 5);
     });
-    expect(retryTimeout).not.toHaveBeenCalledTimes(6);
+    await new Promise((r) => setTimeout(r, 10));
+
+    expect(retryTimeout).toHaveBeenCalledTimes(5);
 
     expect(retryTimeoutNoLimit).toHaveBeenCalledTimes(0);
     await act(async () => {
