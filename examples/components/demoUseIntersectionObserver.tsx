@@ -2,7 +2,7 @@ import React from 'react';
 import useIntersectionObserver from "../../src/hooks/useIntersectionObserver";
 
 const DemoUseIntersectionObserver = () => {
-    const [ref, entry] = useIntersectionObserver();
+    const [ref, entry] = useIntersectionObserver<HTMLDivElement>();
     return (
         <>
             <h1 style={{color: entry?.isIntersecting ? "green" : "red", position: "fixed", left: 0, top: 0}}>
