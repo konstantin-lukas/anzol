@@ -23,10 +23,12 @@ Anzol is built alongside automated tests to ensure quality.
 
 ## Currently Available Hooks
 - <b>useFetch:</b> Fetches data without showing stale responses and allows writing easy-to-understand code that 
-- communicates intention.
+communicates intention.
 - <b>useDefer:</b> Delays the update of a value until that value has stopped changing for a chosen amount of time.
 - <b>useFirstRender:</b> Returns true on the first render and false otherwise.
 - <b>useToggle:</b> Provides a simple boolean toggle that does not persist between page reloads.
+- <b>useIntersectionObserver:</b> Provides a wrapper around the IntersectionObserver API, allowing you to test if an 
+element is currently visible on screen.
 
 ## Installation
 Anzol is available on the NPM registry. To install it, just run:
@@ -43,8 +45,6 @@ user clicks anywhere outside the given element.
 when local storage changes.
 - <b>useEvent:</b> Encapsulates the code needed to correctly listen to events in React, including event listener 
 cleanup.
-- <b>useInView:</b> Takes a reference to an HTML element and returns whether that element's bounding client rectangle is 
-currently in view. You can choose if this hook tests for an element being completely or only partially in view.
 - <b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.
 - <b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically 
 updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
