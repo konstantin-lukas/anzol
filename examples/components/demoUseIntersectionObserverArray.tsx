@@ -21,24 +21,12 @@ const DemoUseIntersectionObserverArray = () => {
             <div ref={el => {
                 if (el) ref.current[0] = el;
             }} style={{marginTop: "200vh", backgroundColor: "red"}}>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
                 Hello, world!
             </div>
 
             <div ref={el => {
                 if (el) ref.current[1] = el;
             }} style={{marginTop: "20vh", marginBottom: "200vh", backgroundColor: "yellow"}}>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
-                Hello, world!<br/>
                 Hello, world!
             </div>
         </>
