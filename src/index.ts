@@ -3,4 +3,4 @@ export { default as useDefer } from './hooks/useDefer';
 export { default as useFirstRender } from './hooks/useFirstRender';
 export { default as useToggle } from './hooks/useToggle';
 export { default as useIntersectionObserver } from './hooks/useIntersectionObserver';
-export { default as useIntersectionObserverList } from './hooks/useIntersectionObserverArray';
+export { default as useIntersectionObserverArray } from './hooks/useIntersectionObserverArray';

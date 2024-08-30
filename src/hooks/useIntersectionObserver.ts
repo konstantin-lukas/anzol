@@ -41,7 +41,7 @@ import {RefObject, useEffect, useRef, useState} from "react";
  * };
  * ```
  */
-function useIntersectionObserver<T>({
+function useIntersectionObserver<T extends Element>({
     root = null,
     rootMargin = "0px 0px 0px 0px",
     threshold = 1.0,
@@ -50,7 +50,7 @@ function useIntersectionObserver<T>({
     rootMargin?: string,
     threshold?: number | number[],
 } = {}): [RefObject<T>, IntersectionObserverEntry | null] {
-    const ref = useRef<T>(null);
+    const ref = useRef<T | null>(null);
     const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
     useEffect(() => {
         if (ref.current) {
@@ -58,7 +58,7 @@ function useIntersectionObserver<T>({
                 (e) => setEntry(e[0]),
                 { root, rootMargin, threshold },
             );
-            observer.observe(ref.current);
+            observer.observe(ref.current as T);
             return () => observer.disconnect();
         }
     }, [ref, root, rootMargin, threshold]);

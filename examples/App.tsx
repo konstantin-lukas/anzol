@@ -1,9 +1,9 @@
 import React from 'react';
-import DemoUseIntersectionObserverArray from "./components/demoUseIntersectionObserverArray";
+import DemoUseIntersectionObserver from "./components/demoUseIntersectionObserver";
 
 const App: React.FC = () => {
     return (
-        <DemoUseIntersectionObserverArray/>
+        <DemoUseIntersectionObserver/>
     );
 };
 

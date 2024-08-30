@@ -41,7 +41,7 @@ import {RefObject, useEffect, useRef, useState} from "react";
  * const DemoUseIntersectionObserverArray = () => {
  *     const [ref, entries] = useIntersectionObserverArray<HTMLDivElement>();
  *     const allInView = useMemo(
- *         () => !entries.some(x => !x?.isIntersecting),
+ *         () => entries.length > 0 && entries.every(x => x?.isIntersecting),
  *         [entries],
  *     );
  *     return (
@@ -57,7 +57,7 @@ import {RefObject, useEffect, useRef, useState} from "react";
  * };
  * ```
  */
-function useIntersectionObserverArray<T>({
+function useIntersectionObserverArray<T extends Element>({
     root = null,
     rootMargin = "0px 0px 0px 0px",
     threshold = 1.0,
@@ -66,7 +66,7 @@ function useIntersectionObserverArray<T>({
     root?: Element | Document | null,
     rootMargin?: string,
     threshold?: number,
-    alwaysShowLatestIntersection?: boolean,
+    alwaysShowLastIntersection?: boolean,
 } = {}): [RefObject<T[]>, (IntersectionObserverEntry | null)[]] {
     const ref = useRef<T[]>([]);
     const [entries, setEntries] = useState<(IntersectionObserverEntry | null)[]>([]);
@@ -80,7 +80,7 @@ function useIntersectionObserverArray<T>({
                             : [...prevState];
                         e.forEach((e_) => {
                             const target = e_.target;
-                            const index = ref.current.indexOf(target);
+                            const index = ref.current.indexOf(target as T);
                             if (index > -1) {
                                 newEntries[index] = e_;
                             }

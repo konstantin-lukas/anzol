@@ -4,7 +4,7 @@ import useIntersectionObserverArray from "../../src/hooks/useIntersectionObserve
 const DemoUseIntersectionObserverArray = () => {
     const [ref, entries] = useIntersectionObserverArray<HTMLDivElement>();
     const allInView = useMemo(
-        () => !entries.some(x => !x?.isIntersecting),
+        () => entries.length > 0 && entries.every(x => x?.isIntersecting),
         [entries],
     );
     return (
