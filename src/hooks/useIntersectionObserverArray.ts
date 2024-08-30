@@ -29,7 +29,7 @@ export type IntersectionObserverArrayOptions = IntersectionObserverOptions & {
  * IntersectionObserverEntries are returned that triggered the change of the return value. The rest is set to null.
  *
  * @example
- * ```ts
+ * ```tsx
  * const DemoUseIntersectionObserverArray = () => {
  *     const [ref, entries] = useIntersectionObserverArray<HTMLDivElement>();
  *     const allInView = useMemo(

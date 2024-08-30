@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
  * @return The deferred input value.
  *
  * @example
- * ```ts
+ * ```tsx
  * const DemoUseDefer = () => {
  *     const [value, setValue] = useState("");
  *     const displayValue = useDefer(value, 500);

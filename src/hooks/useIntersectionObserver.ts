@@ -29,7 +29,7 @@ export type IntersectionObserverOptions = {
  * every time there is a change in the intersection.
  *
  * @example
- * ```ts
+ * ```tsx
  * const DemoUseIntersectionObserver = () => {
  *     const [ref, entry] = useIntersectionObserver<HTMLDivElement>();
  *     return (

@@ -38,7 +38,7 @@ export type FetchOptions = {
  * @return FetchResult - An object containing information about the result of a fetch request
  *
  * @example
- * ```ts
+ * ```tsx
  * const DemoUseFetch = () => {
  *     const [value, setValue] = useState("");
  *     const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));

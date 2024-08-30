@@ -5,7 +5,7 @@ import { useRef } from 'react';
  * @return true on first render; false otherwise.
  *
  * @example
- * ```ts
+ * ```tsx
  * const DemoUseFirstRender = () => {
  *     const isFirstRender = useFirstRender();
  *     const [count, setCount] = useState(0);

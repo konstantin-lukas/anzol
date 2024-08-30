@@ -9,7 +9,7 @@ import { useState, useCallback } from 'react';
  * @return The current state of the toggle.
  *
  * @example
- * ```ts
+ * ```tsx
  * const DemoUseToggle = () => {
  *     const [state, toggle] = useToggle();
  *     return (
