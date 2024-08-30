@@ -16,11 +16,13 @@ or deferring the updating of values with a custom timeout. You can find working 
 directory.</p>
 <p>Anzol is built alongside automated tests to ensure quality.</p>
 <a id="md:currently-available-hooks" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Currently Available Hooks<a href="#md:currently-available-hooks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
-<li><b>useFetch:</b> Fetches data without showing stale responses and allows writing easy-to-understand code that</li>
-<li>communicates intention.</li>
+<li><b>useFetch:</b> Fetches data without showing stale responses and allows writing easy-to-understand code that
+communicates intention.</li>
 <li><b>useDefer:</b> Delays the update of a value until that value has stopped changing for a chosen amount of time.</li>
 <li><b>useFirstRender:</b> Returns true on the first render and false otherwise.</li>
 <li><b>useToggle:</b> Provides a simple boolean toggle that does not persist between page reloads.</li>
+<li><b>useIntersectionObserver:</b> Provides a wrapper around the IntersectionObserver API, allowing you to test if an
+element is currently visible on screen.</li>
 </ul>
 <a id="md:installation" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Installation<a href="#md:installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Anzol is available on the NPM registry. To install it, just run:</p>
 <pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">anzol</span>
@@ -35,8 +37,6 @@ user clicks anywhere outside the given element.</li>
 when local storage changes.</li>
 <li><b>useEvent:</b> Encapsulates the code needed to correctly listen to events in React, including event listener
 cleanup.</li>
-<li><b>useInView:</b> Takes a reference to an HTML element and returns whether that element's bounding client rectangle is
-currently in view. You can choose if this hook tests for an element being completely or only partially in view.</li>
 <li><b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.</li>
 <li><b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically
 updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.</li>
