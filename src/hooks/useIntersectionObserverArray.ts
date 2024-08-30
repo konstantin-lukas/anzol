@@ -1,5 +1,13 @@
 import {RefObject, useEffect, useRef, useState} from "react";
+import {IntersectionObserverOptions} from "./useIntersectionObserver";
 
+export type IntersectionObserverArrayOptions = IntersectionObserverOptions & {
+    /** If set to true (default), the returned entries always contain the last
+     * intersection change that happened for each element. If set to false, only the recently updated intersections are
+     * contained in the return value and the rest is set to null. If you want to test if multiple element are on screen,
+     * leave this value as default as this will tell where each element was last seen (on-screen or off-screen). */
+    alwaysShowLastIntersection?: boolean;
+}
 
 /**
  * Provides a hook API that wraps the IntersectionObserver API for observing intersections of multiple elements with a
@@ -11,22 +19,6 @@ import {RefObject, useEffect, useRef, useState} from "react";
  * This hook provides a convenient API for return values. Normally the IntersectionObserver API only returns the
  * entries that changed, so you have to figure out which elements they belong to. However, useIntersectionObserverArray
  * returns an array of the same length as the ref array containing the elements to observe.
- *
- * @param root - An Element or Document object which is an ancestor of the intended target, whose bounding rectangle
- * will be considered the viewport. Any part of the target not visible in the visible area of the root is not considered
- * visible. Default is null. Setting the root to null, makes the hook observe intersections with the viewport.
- * @param rootMargin - A string which specifies a set of offsets to add to the root's bounding_box when
- * calculating intersections, effectively shrinking or growing the root for calculation purposes. The syntax is
- * approximately the same as that for the CSS margin property; see The intersection root and root margin  for more
- * information on how the margin works and the syntax. The default is "0px 0px 0px 0px".
- * @param threshold - Either a single number or an array of numbers between 0.0 and 1.0, specifying a ratio of
- * intersection area to total bounding box area for the observed target. A value of 0.0 means that even a single visible
- * pixel counts as the target being visible. 1.0 means that the entire target element is visible. See Thresholds  for a
- * more in-depth description of how thresholds are used. The default is a threshold of 0.0.
- * @param alwaysShowLastIntersection - If set to true (default), the returned entries always contain the last
- * intersection change that happened for each element. If set to false, only the recently updated intersections are
- * contained in the return value and the rest is set to null. If you want to test if multiple element are on screen,
- * leave this value as default as this will tell where each element was last seen (on-screen or off-screen).
  *
  * @return An array whose first value is an array ref you need to attach to the elements to observe. When adding
  * elements to the ref make sure to only add them once (avoid using Array.push). The second value is an
@@ -62,12 +54,7 @@ function useIntersectionObserverArray<T extends Element>({
     rootMargin = "0px 0px 0px 0px",
     threshold = 1.0,
     alwaysShowLastIntersection = true,
-}: {
-    root?: Element | Document | null,
-    rootMargin?: string,
-    threshold?: number,
-    alwaysShowLastIntersection?: boolean,
-} = {}): [RefObject<T[]>, (IntersectionObserverEntry | null)[]] {
+}: IntersectionObserverArrayOptions = {}): [RefObject<T[]>, (IntersectionObserverEntry | null)[]] {
     const ref = useRef<T[]>([]);
     const [entries, setEntries] = useState<(IntersectionObserverEntry | null)[]>([]);
     useEffect(() => {
