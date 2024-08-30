@@ -9,7 +9,7 @@
 [![MIT License](https://img.shields.io/github/license/konstantin-lukas/intl-currency-input?style=flat-square)](https://raw.githubusercontent.com/konstantin-lukas/intl-currency-input/main/LICENSE)
 ![Type Definitions](https://img.shields.io/npm/types/intl-currency-input?style=flat-square)
 ![Code Coverage](https://img.shields.io/coverallsCoverage/github/konstantin-lukas/anzol?style=flat-square)
-![Bundle Size](https://img.shields.io/bundlephobia/min/anzol?style=flat-square)
+![NPM Downloads](https://img.shields.io/npm/dm/anzol?style=flat-square)
 </div>
 
 
