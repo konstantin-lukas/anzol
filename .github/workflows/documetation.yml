@@ -36,7 +36,7 @@ jobs:
         git fetch --all
         git checkout -B documentation
         git reset --hard origin/main
-        find . -D -not \(-name '.git' -or -name 'docs'\) -exec rm -rf \;
+        find . -not \(-name '.git' -or -name 'docs'\) -exec rm -rf \;
         mv docs/* .
         rmdir docs
         git add --all
