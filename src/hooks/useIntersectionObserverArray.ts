@@ -1,5 +1,5 @@
-import {RefObject, useEffect, useRef, useState} from "react";
-import {IntersectionObserverOptions} from "./useIntersectionObserver";
+import { type RefObject, useEffect, useRef, useState } from "react";
+import type { IntersectionObserverOptions } from "./useIntersectionObserver";
 
 export type IntersectionObserverArrayOptions = IntersectionObserverOptions & {
     /** If set to true (default), the returned entries always contain the last
@@ -63,7 +63,7 @@ function useIntersectionObserverArray<T extends Element>({
                 (e) => {
                     setEntries(prevState => {
                         const newEntries = prevState.length === 0 || !alwaysShowLastIntersection
-                            ? Array.from({length: ref.current.length}, () => null)
+                            ? Array.from({ length: ref.current.length }, () => null)
                             : [...prevState];
                         e.forEach((e_) => {
                             const target = e_.target;

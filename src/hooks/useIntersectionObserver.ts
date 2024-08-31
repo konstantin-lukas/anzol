@@ -1,6 +1,6 @@
-import {RefObject, useEffect, useRef, useState} from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
-export type IntersectionObserverOptions = {
+export interface IntersectionObserverOptions {
     /** An Element or Document object which is an ancestor of the intended target, whose bounding rectangle
      * will be considered the viewport. Any part of the target not visible in the visible area of the root is not considered
      * visible. Default is null. Setting the root to null, makes the hook observe intersections with the viewport. */
@@ -16,7 +16,7 @@ export type IntersectionObserverOptions = {
      * pixel counts as the target being visible. 1.0 means that the entire target element is visible. See Thresholds  for a
      * more in-depth description of how thresholds are used. The default is a threshold of 0.0. */
     threshold?: number | number[],
-};
+}
 
 /**
  * Provides a hook API that wraps the IntersectionObserver API. This hook is for use with a single element only. For

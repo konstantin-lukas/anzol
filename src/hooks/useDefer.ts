@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Delays the update of a value until the input has stopped changing for a certain time. This is different
@@ -29,7 +29,7 @@ import {useEffect, useState} from "react";
  * };
  * ```
  */
-const useDefer = <T = any>(input: T, delay: number): T => {
+function useDefer<T = never>(input: T, delay: number): T {
     const [state, setState] = useState(input);
     const [timeoutState, setTimeoutState] = useState<NodeJS.Timeout | undefined>(undefined);
     useEffect(() => {

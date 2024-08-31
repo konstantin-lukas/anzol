@@ -1,8 +1,8 @@
-import React from 'react';
-import {act, render} from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import React from "react";
+import { act, render } from "@testing-library/react";
+import { screen } from "@testing-library/dom";
 import { useIntersectionObserverArray } from "../src";
-import { mockIntersectionObserver } from 'jsdom-testing-mocks';
+import { mockIntersectionObserver } from "jsdom-testing-mocks";
 
 const io = mockIntersectionObserver();
 IntersectionObserver.prototype.observe = jest.fn(IntersectionObserver.prototype.observe);
@@ -26,8 +26,8 @@ function IntersectionComponent() {
     );
 }
 
-test('mount and unmount the IntersectionObserver to the target elements', () => {
-    const {unmount} = render(<IntersectionComponent/>);
+test("mount and unmount the IntersectionObserver to the target elements", () => {
+    const { unmount } = render(<IntersectionComponent/>);
     const targetDiv1 = screen.getByTestId("target-div1");
     const targetDiv2 = screen.getByTestId("target-div2");
     expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv1);
@@ -36,7 +36,7 @@ test('mount and unmount the IntersectionObserver to the target elements', () => 
     expect(IntersectionObserver.prototype.disconnect).toHaveBeenCalled();
 });
 
-test('change state when intersection changes', () => {
+test("change state when intersection changes", () => {
     render(<IntersectionComponent/>);
     const targetDiv1 = screen.getByTestId("target-div1");
     const targetDiv2 = screen.getByTestId("target-div2");

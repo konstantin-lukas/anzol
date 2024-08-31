@@ -1,77 +1,77 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { useFetch } from "../src";
+import { act, renderHook, waitFor } from "@testing-library/react";
+import { type FetchResult, useFetch } from "../src";
 
 beforeEach(() => {
     jest.clearAllMocks();
 });
 
-function preFetchAssertions(result: any) {
-    expect(result.current.data).toEqual(undefined);
-    expect(result.current.loading).toBe(true);
-    expect(result.current.ok).toBe(false);
-    expect(result.current.status).toEqual(undefined);
+function preFetchAssertions(result: FetchResult) {
+    expect(result.data).toEqual(undefined);
+    expect(result.loading).toBe(true);
+    expect(result.ok).toBe(false);
+    expect(result.status).toEqual(undefined);
 }
 
-function postFetchAssertions(result: any) {
-    expect(result.current.ok).toBe(true);
-    expect(result.current.status).toEqual(200);
+function postFetchAssertions(result: FetchResult) {
+    expect(result.ok).toBe(true);
+    expect(result.status).toEqual(200);
     expect(global.fetch).toHaveBeenCalledTimes(1);
 }
-test('should fetch and parse json', async () => {
-    const mockData = { message: 'Success' };
+test("should fetch and parse json", async () => {
+    const mockData = { message: "Success" };
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(mockData),
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
 
-    const {result} = await act(() => renderHook(() => useFetch(
-        "/api"
+    const { result } = await act(() => renderHook(() => useFetch(
+        "/api",
     )));
 
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
     expect(result.current.data).toEqual(mockData);
-    postFetchAssertions(result);
+    postFetchAssertions(result.current);
 
 });
 
-test('should fetch and parse html', async () => {
+test("should fetch and parse html", async () => {
     const mockData = "<html lang='en'><body><h1>Hello, world!</h1></body></html>";
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
             text: () => Promise.resolve(mockData),
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            parseType: "html"
-        }
+            parseType: "html",
+        },
     )));
 
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
     expect(result.current.data).not.toBeInstanceOf(XMLDocument);
     expect(result.current.data).toBeInstanceOf(Document);
-    expect((result.current.data as Document).body.querySelector('h1')?.innerHTML).toBe("Hello, world!");
-    postFetchAssertions(result);
+    expect((result.current.data as Document).body.querySelector("h1")?.innerHTML).toBe("Hello, world!");
+    postFetchAssertions(result.current);
 });
 
-test('should fetch and parse svg', async () => {
+test("should fetch and parse svg", async () => {
     const mockData =
         "<svg height=\"100\" width=\"100\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
         "  <circle r=\"45\" cx=\"50\" cy=\"50\" fill=\"red\" />\n" +
@@ -81,146 +81,146 @@ test('should fetch and parse svg', async () => {
         return Promise.resolve({
             ok: true,
             text: () => Promise.resolve(mockData),
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            parseType: "svg"
-        }
+            parseType: "svg",
+        },
     )));
 
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
     expect(result.current.data).toBeInstanceOf(Document);
-    expect((result.current.data as XMLDocument).querySelector('circle')?.getAttribute('fill')).toBe("red");
-    postFetchAssertions(result);
+    expect((result.current.data as XMLDocument).querySelector("circle")?.getAttribute("fill")).toBe("red");
+    postFetchAssertions(result.current);
 });
 
-test('should fetch and parse xml', async () => {
+test("should fetch and parse xml", async () => {
     const mockData = "<root><info>very interesting</info></root>";
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
             text: () => Promise.resolve(mockData),
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            parseType: "xml"
-        }
+            parseType: "xml",
+        },
     )));
 
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
     expect(result.current.data).toBeInstanceOf(Document);
-    expect((result.current.data as XMLDocument).querySelector('info')?.textContent).toBe("very interesting");
-    postFetchAssertions(result);
+    expect((result.current.data as XMLDocument).querySelector("info")?.textContent).toBe("very interesting");
+    postFetchAssertions(result.current);
 });
 
-test('should fetch and parse text', async () => {
+test("should fetch and parse text", async () => {
     const mockData = "<root><info>very interesting</info></root>";
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
             text: () => Promise.resolve(mockData),
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            parseType: "text"
-        }
+            parseType: "text",
+        },
     )));
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
     expect(typeof result.current.data).toBe("string");
     expect(result.current.data).toBe(mockData);
-    postFetchAssertions(result);
+    postFetchAssertions(result.current);
 });
 
-test('should fetch and not parse when parse type is invalid', async () => {
+test("should fetch and not parse when parse type is invalid", async () => {
     const mockData = "<root><info>very interesting</info></root>";
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
             text: () => Promise.resolve(mockData),
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
 
     console.error = jest.fn();
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            parseType: "svf" as "svg"
-        }
+            parseType: "svf" as "svg",
+        },
     )));
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
     expect(typeof result.current.data).toBe("object");
-    expect(await result.current.data.text()).toBe(mockData);
+    expect(await (result.current.data as Response).text()).toBe(mockData);
     expect(console.error).toHaveBeenCalledTimes(1);
-    postFetchAssertions(result);
+    postFetchAssertions(result.current);
 });
 
 
-test('should fetch and not parse the response', async () => {
+test("should fetch and not parse the response", async () => {
     const mockData = "I'm a teapot.";
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
             statusText: mockData,
-            status: 201
+            status: 201,
         });
     }) as jest.Mock;
 
     console.error = jest.fn();
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            parseType: "response"
-        }
+            parseType: "response",
+        },
     )));
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
-    expect(result.current.data?.ok).toBe(true);
-    expect(result.current.data?.status).toBe(201);
-    expect(result.current.data?.statusText).toBe(mockData);
+    expect((result.current.data as Response).ok).toBe(true);
+    expect((result.current.data as Response).status).toBe(201);
+    expect((result.current.data as Response).statusText).toBe(mockData);
     expect(console.error).toHaveBeenCalledTimes(0);
 });
 
-test('should discard stale requests', async () => {
-    const mockData1 = { message: 'Success1' };
-    const mockData2 = { message: 'Success2' };
+test("should discard stale requests", async () => {
+    const mockData1 = { message: "Success1" };
+    const mockData2 = { message: "Success2" };
     const firstUrl = "https://first-url.com";
     const secondUrl = "https://second-url.com";
 
@@ -230,25 +230,24 @@ test('should discard stale requests', async () => {
             return Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve(mockData1),
-                status: 200
+                status: 200,
             });
         } else {
             return Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve(mockData2),
-                status: 200
+                status: 200,
             });
         }
     }) as jest.Mock;
 
     const { result, rerender } = await act(async () => {
-        // @ts-ignore
         return renderHook((url: string) => useFetch(url), {
-            initialProps: firstUrl
+            initialProps: firstUrl,
         });
     });
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
 
     rerender(secondUrl);
 
@@ -262,9 +261,9 @@ test('should discard stale requests', async () => {
 });
 
 
-test('should not discard stale requests when asked to do so', async () => {
-    const mockData1 = { message: 'Success1' };
-    const mockData2 = { message: 'Success2' };
+test("should not discard stale requests when asked to do so", async () => {
+    const mockData1 = { message: "Success1" };
+    const mockData2 = { message: "Success2" };
     const firstUrl = "https://first-url.com";
     const secondUrl = "https://second-url.com";
 
@@ -274,27 +273,26 @@ test('should not discard stale requests when asked to do so', async () => {
             return Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve(mockData1),
-                status: 200
+                status: 200,
             });
         } else {
             return Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve(mockData2),
-                status: 200
+                status: 200,
             });
         }
     }) as jest.Mock;
 
     const { result, rerender } = await act(async () => {
-        // @ts-ignore
         return renderHook((url: string) => useFetch(url, {
             discardStaleRequests: false,
         }), {
-            initialProps: firstUrl
+            initialProps: firstUrl,
         });
     });
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
 
     await act(async () => {
         rerender(secondUrl);
@@ -313,20 +311,20 @@ test('should not discard stale requests when asked to do so', async () => {
     });
 });
 
-test('should return no data on error', async () => {
+test("should return no data on error", async () => {
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: false,
-            status: 404
+            status: 404,
         });
     }) as jest.Mock;
 
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
     )));
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
@@ -336,24 +334,24 @@ test('should return no data on error', async () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
 });
 
-test('should attempt to retry if given a timeout function', async () => {
+test("should attempt to retry if given a timeout function", async () => {
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: false,
-            status: 404
+            status: 404,
         });
     }) as jest.Mock;
 
     const retryTimeout = jest.fn((attempt: number) => attempt);
-    const {result} = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch(
         "/api",
         {
-            retryTimeout
+            retryTimeout,
         },
     )));
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(retryTimeout).toHaveBeenNthCalledWith(20, 20);
     });
@@ -362,7 +360,7 @@ test('should attempt to retry if given a timeout function', async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: true,
-            status: 200
+            status: 200,
         });
     }) as jest.Mock;
     await waitFor(() => {
@@ -372,12 +370,12 @@ test('should attempt to retry if given a timeout function', async () => {
     expect(result.current.status).toEqual(200);
 });
 
-test('should attempt to retry only a limited amount of times', async () => {
+test("should attempt to retry only a limited amount of times", async () => {
     global.fetch = jest.fn(async () => {
         await new Promise((r) => setTimeout(r, 0));
         return Promise.resolve({
             ok: false,
-            status: 404
+            status: 404,
         });
     }) as jest.Mock;
 
@@ -390,18 +388,17 @@ test('should attempt to retry only a limited amount of times', async () => {
     });
 
     const { result, rerender } = await act(async () => {
-        // @ts-ignore
         return renderHook((retryMethod) => useFetch(
             "/api",
             {
                 retryTimeout: retryMethod,
             },
         ), {
-            initialProps: retryTimeout
+            initialProps: retryTimeout,
         });
     });
 
-    preFetchAssertions(result);
+    preFetchAssertions(result.current);
     await waitFor(() => {
         expect(retryTimeout).toHaveBeenNthCalledWith(5, 5);
     });

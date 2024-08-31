@@ -1,7 +1,7 @@
-import {act, renderHook, waitFor} from "@testing-library/react";
-import {useToggle} from "../src";
+import { act, renderHook, waitFor } from "@testing-library/react";
+import { useToggle } from "../src";
 
-test('should toggle a value', async () => {
+test("should toggle a value", async () => {
     const { result } = await act(async () => {
         return renderHook(() => useToggle(true));
     });
