@@ -1,0 +1,39 @@
+name: Deploy TypeDoc Documentation on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  generate-and-deploy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+
+    - run: npm ci
+    - run: npm run test
+    - run: npm run docs
+
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push documentation to documentation branch
+      run: |
+        git fetch origin
+        git checkout -B documentation
+        cp -R docs/* .
+        git add .
+        git commit -m "Deploy TypeDoc documentation for tag ${{ github.ref_name }}"
+        git push origin documentation --force
