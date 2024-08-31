@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 export type FetchResultData = JSON | Document | Response | string | undefined;
 
+export type ParseType = "json" | "html" | "xml" | "text" | "svg" | "response";
+
 export interface FetchResult {
     /** The response to the fetch request. Type depends on selected parseType. Is undefined if fetch was unsuccessful. */
     data: FetchResultData,
@@ -17,7 +19,7 @@ export interface FetchResult {
 export interface FetchOptions {
     /** How to parse the result (determines type of returned data). Set to "response" if you
      * don't want to extract the data automatically and receive the response object instead. */
-    parseType?: "json" | "html" | "xml" | "text" | "svg" | "response",
+    parseType?: ParseType,
     /** The options passed to the fetch function. Note: custom signals will be overwritten internally. */
     requestOptions?: RequestInit,
     /** Discards all responses except the last one made. This prevents

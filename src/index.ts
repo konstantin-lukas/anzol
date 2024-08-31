@@ -1,4 +1,4 @@
-export { default as useFetch, FetchResult, FetchResultData, FetchOptions } from "./hooks/useFetch";
+export { default as useFetch, FetchResult, FetchResultData, ParseType, FetchOptions } from "./hooks/useFetch";
 export { default as useDefer } from "./hooks/useDefer";
 export { default as useFirstRender } from "./hooks/useFirstRender";
 export { default as useToggle } from "./hooks/useToggle";
