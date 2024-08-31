@@ -30,6 +30,8 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
     - name: Commit and push documentation to documentation branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git fetch origin
         git checkout -B documentation
