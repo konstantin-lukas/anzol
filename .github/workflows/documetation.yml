@@ -36,8 +36,8 @@ jobs:
         git fetch --all
         git checkout -B documentation
         git reset --hard origin/main
-        find . -not -name '.git' -not -name 'docs' -delete
-        mv -r docs/* .
+        find . -not -name '.git' -not -name 'docs' -exec rm -rf \;
+        mv docs/* .
         rmdir docs
         git add --all
         git commit -m "Deploy TypeDoc documentation for tag ${{ github.ref_name }}"
