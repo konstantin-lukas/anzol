@@ -23,6 +23,14 @@ function WindowEventComponent({ event, spyFunction }: { event: string, spyFuncti
     return <></>;
 }
 
+function TargetEventComponent({ target, spyFunction }: { target: EventTarget | null, spyFunction: () => void }) {
+    const setTarget = useEvent("click", spyFunction);
+    useEffect(() => {
+        setTarget(target);
+    }, [target]);
+    return <></>;
+}
+
 test("should register events on elements and deregister them when props change", () => {
 
     const { rerender } = render(<ElementEventComponent event="mouseover"/>);
@@ -56,5 +64,20 @@ test("should register events on the window and deregister them when props change
     expect(spyFunction).toHaveBeenCalledTimes(1);
     fireEvent.click(target, { target });
     expect(spyFunction).toHaveBeenCalledTimes(2);
+
+});
+
+test("should deregister event listeners when null is passed", () => {
+
+    const spyFunction = jest.fn();
+    const { rerender } = render(<TargetEventComponent target={ window } spyFunction={ spyFunction }/>);
+
+    expect(spyFunction).toHaveBeenCalledTimes(0);
+    fireEvent.click(window, { window });
+    expect(spyFunction).toHaveBeenCalledTimes(1);
+
+    rerender(<TargetEventComponent target={ null } spyFunction={ spyFunction }/>);
+    fireEvent.click(window, { window });
+    expect(spyFunction).toHaveBeenCalledTimes(1);
 
 });
