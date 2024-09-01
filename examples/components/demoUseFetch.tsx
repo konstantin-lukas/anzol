@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import useFetch from "../../src/hooks/useFetch";
 
 const DemoUseFetch = () => {
     const [value, setValue] = useState("");
-    const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));
-    const list = data?.data.map((e, i) => <li key={i}>{e.title}</li>)
+    const {loading, data} = useFetch<{
+        data: { title: string }[]
+    }>(
+        "https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value)
+    );
+    const list = useMemo(() => data?.data.map((e: any, i: number) => <li key={i}>{e.title}</li>), [data]);
     return (
         <div>
             <input

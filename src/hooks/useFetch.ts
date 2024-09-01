@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 
-export type FetchResultData = JSON | Document | Response | string | undefined;
+/** Possible return types depending on how the result is parsed. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FetchResultData = any | string | Document | Response;
 
+/** Defines the possible ways to parse return values. */
 export type ParseType = "json" | "html" | "xml" | "text" | "svg" | "response";
 
-export interface FetchResult {
-    /** The response to the fetch request. Type depends on selected parseType. Is undefined if fetch was unsuccessful. */
-    data: FetchResultData,
+/** @template T - Type of the returned result. Can be overwritten. This is useful when defining a custom shape
+ * for JSON objects or simply telling TypeScript which return type to use. You don't have to set this type manually.
+ * It is just for convenience when using TypeScript, so you don't have to make any type assertions on the output. */
+export interface FetchResult<T = FetchResultData> {
+    /** The response to the fetch request. Is undefined if fetch was unsuccessful. */
+    data: T | undefined,
     /** Indicates if the fetch is still ongoing (i.e. has not finished). Wait for this to be true before reading other
      * fields. Is useful to display a spinner while waiting for results. */
     loading: boolean,
@@ -32,10 +38,18 @@ export interface FetchOptions {
      * input parameter to the hook changes and resets the internal retry counter.*/
     retryTimeout?: (attempt: number) => number | undefined,
 }
-
 /**
  * Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
  * started before the previous has finished to prevent flickering of stale responses by default.
+ *
+ * @template T - Type of the returned result. This is only for convenience when using TypeScript. You can put the type
+ * here you expect to receive depending on the selected {@link parseType}. This allows you to avoid making manual type
+ * assertions on the returned data. Here's a list of what parseTypes result in which return types:
+ * - "html": {@link Document}
+ * - "xml", "svg": {@link XMLDocument}
+ * - "text": {@link string}
+ * - "response": {@link Response}
+ * - "json" (default): {@link any} - When parsing JSON it is generally recommended to pass a custom type instead.
  *
  * @param url - The resource to fetch
  * @param {FetchOptions} options - Allows you to configure how useFetch makes and returns requests
@@ -45,7 +59,11 @@ export interface FetchOptions {
  * ```tsx
  * const DemoUseFetch = () => {
  *     const [value, setValue] = useState("");
- *     const {loading, data} = useFetch("https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value));
+ *     const {loading, data} = useFetch<{
+ *         data: { title: string }[]
+ *     }>(
+ *         "https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value)
+ *     );
  *     const list = data?.data.map((e, i) => <li key={i}>{e.title}</li>)
  *     return (
  *         <div>
@@ -62,7 +80,7 @@ export interface FetchOptions {
  * };
  * ```
  */
-const useFetch = (
+function useFetch<T = FetchResultData>(
     url: string,
     {
         parseType = "json",
@@ -70,11 +88,11 @@ const useFetch = (
         discardStaleRequests = true,
         retryTimeout = undefined,
     }: FetchOptions = {},
-): FetchResult => {
+): FetchResult<T | undefined> {
     const [status, setStatus] = useState<number>();
     const [ok, setOk] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<FetchResultData>(undefined);
+    const [data, setData] = useState<T | undefined>(undefined);
     const [retries, setRetries] = useState(1);
 
     useEffect(() => {
@@ -130,6 +148,6 @@ const useFetch = (
         }
     }, [url, parseType, retries, discardStaleRequests, retryTimeout]);
     return { data, loading, ok, status };
-};
+}
 
 export default useFetch;

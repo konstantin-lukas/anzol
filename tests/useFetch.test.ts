@@ -5,14 +5,14 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-function preFetchAssertions(result: FetchResult) {
+function preFetchAssertions<T>(result: FetchResult<T>) {
     expect(result.data).toEqual(undefined);
     expect(result.loading).toBe(true);
     expect(result.ok).toBe(false);
     expect(result.status).toEqual(undefined);
 }
 
-function postFetchAssertions(result: FetchResult) {
+function postFetchAssertions<T>(result: FetchResult<T>) {
     expect(result.ok).toBe(true);
     expect(result.status).toEqual(200);
     expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -53,7 +53,7 @@ test("should fetch and parse html", async () => {
         });
     }) as jest.Mock;
 
-    const { result } = await act(() => renderHook(() => useFetch(
+    const { result } = await act(() => renderHook(() => useFetch<Document>(
         "/api",
         {
             parseType: "html",
@@ -67,7 +67,7 @@ test("should fetch and parse html", async () => {
     });
     expect(result.current.data).not.toBeInstanceOf(XMLDocument);
     expect(result.current.data).toBeInstanceOf(Document);
-    expect((result.current.data as Document).body.querySelector("h1")?.innerHTML).toBe("Hello, world!");
+    expect(result.current.data?.body.querySelector("h1")?.innerHTML).toBe("Hello, world!");
     postFetchAssertions(result.current);
 });
 
@@ -98,7 +98,7 @@ test("should fetch and parse svg", async () => {
         expect(result.current.loading).toBe(false);
     });
     expect(result.current.data).toBeInstanceOf(Document);
-    expect((result.current.data as XMLDocument).querySelector("circle")?.getAttribute("fill")).toBe("red");
+    expect((result.current.data).querySelector("circle")?.getAttribute("fill")).toBe("red");
     postFetchAssertions(result.current);
 });
 
@@ -126,7 +126,7 @@ test("should fetch and parse xml", async () => {
         expect(result.current.loading).toBe(false);
     });
     expect(result.current.data).toBeInstanceOf(Document);
-    expect((result.current.data as XMLDocument).querySelector("info")?.textContent).toBe("very interesting");
+    expect((result.current.data).querySelector("info")?.textContent).toBe("very interesting");
     postFetchAssertions(result.current);
 });
 
@@ -182,7 +182,7 @@ test("should fetch and not parse when parse type is invalid", async () => {
         expect(result.current.loading).toBe(false);
     });
     expect(typeof result.current.data).toBe("object");
-    expect(await (result.current.data as Response).text()).toBe(mockData);
+    expect(await (result.current.data).text()).toBe(mockData);
     expect(console.error).toHaveBeenCalledTimes(1);
     postFetchAssertions(result.current);
 });
@@ -212,9 +212,9 @@ test("should fetch and not parse the response", async () => {
     await waitFor(() => {
         expect(result.current.loading).toBe(false);
     });
-    expect((result.current.data as Response).ok).toBe(true);
-    expect((result.current.data as Response).status).toBe(201);
-    expect((result.current.data as Response).statusText).toBe(mockData);
+    expect(result.current.data.ok).toBe(true);
+    expect(result.current.data.status).toBe(201);
+    expect(result.current.data.statusText).toBe(mockData);
     expect(console.error).toHaveBeenCalledTimes(0);
 });
 
