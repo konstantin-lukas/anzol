@@ -29,6 +29,8 @@ communicates intention.
 - <b>useToggle:</b> Provides a simple boolean toggle that does not persist between page reloads.
 - <b>useIntersectionObserver:</b> Provides a wrapper around the IntersectionObserver API, allowing you to test if an 
 element is currently visible on screen.
+- <b>useEvent:</b> Encapsulates the code needed to correctly listen to events in React, including event listener
+cleanup.
 
 ## Installation
 Anzol is available on the NPM registry. To install it, just run:
@@ -43,8 +45,6 @@ suggestions.
 user clicks anywhere outside the given element.
 - <b>useLocalStorage:</b> Provides access to local storage, with the additional option to update all usages of this hook 
 when local storage changes.
-- <b>useEvent:</b> Encapsulates the code needed to correctly listen to events in React, including event listener 
-cleanup.
 - <b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.
 - <b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically 
 updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
