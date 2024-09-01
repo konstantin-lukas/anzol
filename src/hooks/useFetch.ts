@@ -47,9 +47,9 @@ export interface FetchOptions {
  * assertions on the returned data. Here's a list of what parseTypes result in which return types:
  * - "html": {@link Document}
  * - "xml", "svg": {@link XMLDocument}
- * - "text": {@link string}
+ * - "text": string
  * - "response": {@link Response}
- * - "json" (default): {@link any} - When parsing JSON it is generally recommended to pass a custom type instead.
+ * - "json" (default): any - When parsing JSON it is generally recommended to pass a custom type instead.
  *
  * @param url - The resource to fetch
  * @param {FetchOptions} options - Allows you to configure how useFetch makes and returns requests

@@ -8,11 +8,12 @@ import { useEffect, useState } from "react";
  * @param options.catpure - {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#capture See capture on mdn web docs}
  * @param options.once - {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#once See once on mdn web docs}
  * @param options.passive - {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#passive See passive on mdn web docs}
+ * @param options.signal - {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#signal See signal on mdn web docs}
  * @template T - The type of the event target.
  *
- * @return {@link SetStateAction} - A function which is used to assign the event target for convenience. The returned
+ * @return {@link https://react.dev/reference/react/useState SetStateAction} - A function which is used to assign the event target for convenience. The returned
  * value can be used like a ref when the target is an HTMLElement. If the target is the {@link window} or
- * {@link document}, you can use it like a regular {@link SetStateAction}.
+ * {@link document}, you can use it like a regular {@link https://react.dev/reference/react/useState useState} setter.
  *
  *
  * @example
