@@ -53,7 +53,7 @@ export interface FetchOptions {
  *
  * @param url - The resource to fetch
  * @param {FetchOptions} options - Allows you to configure how useFetch makes and returns requests
- * @return FetchResult - An object containing information about the result of a fetch request
+ * @return {@link FetchResult} - An object containing information about the result of a fetch request
  *
  * @example
  * ```tsx
