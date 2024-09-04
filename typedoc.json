@@ -3,5 +3,6 @@
     "entryPoints": ["src/index.ts"],
     "exclude": ["node_modules", "**/*spec.ts", "**/*test.ts", "examples", "dist"],
     "theme": "default",
-    "readme": "README.md"
+    "readme": "README.md",
+    "kindSortOrder": ["Function", "Interface", "TypeAlias"]
 }

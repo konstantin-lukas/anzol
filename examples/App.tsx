@@ -1,9 +1,9 @@
 import React from 'react';
-import DemoUseEvent from "./components/demoUseEvent";
+import DemoUseLazyLoad from "./components/demoUseLazyLoad";
 
 const App: React.FC = () => {
     return (
-        <DemoUseEvent/>
+        <DemoUseLazyLoad/>
     );
 };
 

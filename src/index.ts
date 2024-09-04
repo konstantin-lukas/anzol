@@ -34,4 +34,6 @@ export {
 
 export {
     default as useLazyLoad,
+    LazyLoadState,
+    LazyLoadOptions,
 } from "./hooks/useLazyLoad";
