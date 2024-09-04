@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
  * };
  * ```
  */
-function useDefer<T = never>(input: T, delay: number): T {
+function useDefer<T>(input: T, delay: number): T {
     const [state, setState] = useState(input);
     const [timeoutState, setTimeoutState] = useState<NodeJS.Timeout | undefined>(undefined);
     useEffect(() => {

@@ -31,3 +31,7 @@ export {
 export {
     default as useEvent,
 } from "./hooks/useEvent";
+
+export {
+    default as useLazyLoad,
+} from "./hooks/useLazyLoad";
