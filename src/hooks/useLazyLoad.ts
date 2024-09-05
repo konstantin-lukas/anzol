@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 export interface LazyLoadState<T> {
     /** Calling this function triggers fetching more items an updating the hook state. Calling this function while
      * {@link isFetching} is true, does nothing. */
-    loadMore: () => void,
+    loadMore: () => Promise<void>,
     /** A list of all returned elements. Grows every time {@link loadMore} is called until the max amount of elements
      * has been reached. */
     elements: T[],
