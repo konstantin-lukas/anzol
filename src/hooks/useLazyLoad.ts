@@ -14,7 +14,7 @@ export interface LazyLoadState<T> {
      * spinner. Gets set to true when {@link loadMore} is called and set back to false once it has finished executing. */
     isFetching: boolean,
     /** Calling this function resets the hook to its initial state. */
-    reset: () => void,
+    clear: () => void,
 }
 
 export interface LazyLoadOptions {
@@ -47,7 +47,7 @@ export interface LazyLoadOptions {
  * @example
  * ```tsx
  * const DemoUseLazyLoad = () => {
- *     const { loadMore, elements, reachedEnd, isFetching, reset } = useLazyLoad<ReactNode>(35, async (performedFetches) => {
+ *     const { loadMore, elements, reachedEnd, isFetching, clear } = useLazyLoad<ReactNode>(35, async (performedFetches) => {
  *         const data = await fetch(`https://api.artic.edu/api/v1/artworks?page=${performedFetches + 1}&limit=10`);
  *         const parsedData = await data.json();
  *         const elements = parsedData?.data ?? [];
@@ -56,7 +56,7 @@ export interface LazyLoadOptions {
  *     return (
  *         <div>
  *             <button onClick={loadMore} disabled={reachedEnd}>Load more</button>
- *             <button onClick={reset}>Reset</button>
+ *             <button onClick={clear}>Reset</button>
  *             <ul>
  *                 {elements}
  *             </ul>
@@ -119,7 +119,7 @@ function useLazyLoad<T>(
         elements,
         reachedEnd,
         isFetching,
-        reset: () => {
+        clear: () => {
             setElements([]);
             setIsFetching(false);
             setReachedEnd(false);

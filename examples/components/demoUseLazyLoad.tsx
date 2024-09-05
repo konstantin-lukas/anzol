@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react';
 import useLazyLoad from "../../src/hooks/useLazyLoad";
 
 const DemoUseLazyLoad = () => {
-    const { loadMore, elements, reachedEnd, isFetching, reset } = useLazyLoad<ReactNode>(35, async (performedFetches) => {
+    const { loadMore, elements, reachedEnd, isFetching, clear } = useLazyLoad<ReactNode>(35, async (performedFetches) => {
         const data = await fetch(`https://api.artic.edu/api/v1/artworks?page=${performedFetches + 1}&limit=10`);
         const parsedData = await data.json();
         const elements = parsedData?.data ?? [];
@@ -11,7 +11,7 @@ const DemoUseLazyLoad = () => {
     return (
         <div>
             <button onClick={loadMore} disabled={reachedEnd}>Load more</button>
-            <button onClick={reset}>Reset</button>
+            <button onClick={clear}>Reset</button>
             <ul>
                 {elements}
             </ul>

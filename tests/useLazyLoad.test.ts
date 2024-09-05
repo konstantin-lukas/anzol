@@ -15,7 +15,7 @@ const animalsMockData = [
     { name: "tiger", call: "roar" },
     { name: "capybara", call: "squeak" },
     { name: "cat", call: "meow" },
-    { name: "chicke", call: "cluck" },
+    { name: "chicken", call: "cluck" },
     { name: "cicada", call: "chirp" },
     { name: "dog", call: "woof" },
     { name: "owl", call: "hoot" },
@@ -79,3 +79,36 @@ test("should fetch data when triggered to do so and stop when reaching the end",
     expect(result.current.elements).toEqual(animalsMockData);
     expect(result.current.reachedEnd).toBe(true);
 });
+
+test("should truncate the results by default if the final fetch returns more results than expected", async () => {
+    /* TODO */
+});
+
+test("should not truncate the results if the final fetch returns more results than expected and configured to do so", async () => {
+    /* TODO */
+});
+
+test("should reach the end if a batch size is specified and a fetch result returns a shorter result", async () => {
+    /* TODO */
+});
+
+test("should reach the end by default if the fetch function throws an error", async () => {
+    /* TODO */
+});
+
+test("should not reach the end by if the fetch function throws an error and configured to do so", async () => {
+    /* TODO */
+});
+
+test("should clear its state when the clear() function is called", async () => {
+    /* TODO */
+});
+
+test("should clear its state when the fetch function changes", async () => {
+    /* TODO */
+});
+
+test("should allow fetching again if the maxElements prop changes after reaching the end", async () => {
+    /* TODO */
+});
+
