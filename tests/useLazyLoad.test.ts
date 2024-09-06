@@ -10,7 +10,7 @@ interface Animal {
 const animalsMockData = [
     { name: "bear", call: "roar" },
     { name: "mouse", call: "squeak" },
-    { name: "bear", call: "roar" },
+    { name: "lion", call: "roar" },
     { name: "bee", call: "buzz" },
     { name: "tiger", call: "roar" },
     { name: "capybara", call: "squeak" },
@@ -35,13 +35,18 @@ global.fetch = jest.fn(async (url: string) => {
     });
 }) as jest.Mock;
 
+async function fetchFunction(fetchIndex: number) {
+    const data = await fetch(`https://api.org/animals?length=3&offset=${fetchIndex * 3}`);
+    return await data.json();
+}
+
 async function renderUseLazyLoad({
     initialLimit,
     initialFunc,
     initialOptions,
 }: {
-    initialLimit?: number,
-    initialFunc?: () => Promise<Animal[]>,
+    initialLimit?: number | (() => number),
+    initialFunc?: (n: number) => Promise<Animal[]>,
     initialOptions?: LazyLoadOptions,
     initialLength?: number,
     initialOffset?: number,
@@ -52,10 +57,7 @@ async function renderUseLazyLoad({
     } = await act(async () => {
         return renderHook(({ func, limit, options }) => useLazyLoad<Animal>(limit, func, options), {
             initialProps: {
-                func: initialFunc ?? (async (fetchIndex: number) => {
-                    const data = await fetch(`https://api.org/animals?length=3&offset=${fetchIndex * 3}`);
-                    return await data.json();
-                }),
+                func: initialFunc ?? fetchFunction,
                 limit: initialLimit ?? 15,
                 options: initialOptions ?? {},
             },
@@ -81,34 +83,117 @@ test("should fetch data when triggered to do so and stop when reaching the end",
 });
 
 test("should truncate the results by default if the final fetch returns more results than expected", async () => {
-    /* TODO */
+    const { result } = await renderUseLazyLoad({ initialLimit: 5 });
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 3));
+    expect(result.current.reachedEnd).toBe(false);
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 5));
+    expect(result.current.reachedEnd).toBe(true);
 });
 
 test("should not truncate the results if the final fetch returns more results than expected and configured to do so", async () => {
-    /* TODO */
+    const { result } = await renderUseLazyLoad({ initialLimit: 5, initialOptions: { truncate: false }});
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 3));
+    expect(result.current.reachedEnd).toBe(false);
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 6));
+    expect(result.current.reachedEnd).toBe(true);
 });
 
 test("should reach the end if a batch size is specified and a fetch result returns a shorter result", async () => {
-    /* TODO */
+    const { result } = await renderUseLazyLoad({ initialOptions: { batchSize: 10 }});
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 3));
+    expect(result.current.reachedEnd).toBe(true);
 });
 
 test("should reach the end by default if the fetch function throws an error", async () => {
-    /* TODO */
+    const { result } = await renderUseLazyLoad({ initialFunc: () => { throw new Error(); } });
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual([]);
+    expect(result.current.reachedEnd).toBe(true);
 });
 
 test("should not reach the end by if the fetch function throws an error and configured to do so", async () => {
-    /* TODO */
+    const { result } = await renderUseLazyLoad({
+        initialFunc: () => { throw new Error(); },
+        initialOptions: { continueOnError: true },
+    });
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual([]);
+    expect(result.current.reachedEnd).toBe(false);
 });
 
 test("should clear its state when the clear() function is called", async () => {
-    /* TODO */
+    const { result } = await renderUseLazyLoad({});
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 3));
+    expect(result.current.reachedEnd).toBe(false);
+
+    await act(async () => result.current.clear());
+    expect(result.current.elements).toEqual([]);
+    expect(result.current.reachedEnd).toBe(false);
 });
 
-test("should clear its state when the fetch function changes", async () => {
-    /* TODO */
+test("should allow changing the fetch function", async () => {
+    const options = { };
+    const { result, rerender } = await renderUseLazyLoad({ initialLimit: 5, initialFunc: fetchFunction, initialOptions: options });
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 3));
+    expect(result.current.reachedEnd).toBe(false);
+
+    rerender({ limit: 5, func: () => { return fetchFunction(2); }, options: options });
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual([...animalsMockData.slice(0, 3), ...animalsMockData.slice(6, 8)]);
+    expect(result.current.reachedEnd).toBe(true);
 });
 
-test("should allow fetching again if the maxElements prop changes after reaching the end", async () => {
-    /* TODO */
+test("should allow fetching again if the maxElements prop changes to a larger number after reaching the end", async () => {
+    const options = { };
+    const { result, rerender } = await renderUseLazyLoad({ initialLimit: 3, initialFunc: fetchFunction, initialOptions: options });
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 3));
+    expect(result.current.reachedEnd).toBe(true);
+
+    rerender({ limit: 5, func: fetchFunction, options: options });
+    expect(result.current.reachedEnd).toBe(false);
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 5));
+    expect(result.current.reachedEnd).toBe(true);
+});
+
+test("should allow passing a callback function to calculate the element limit", async () => {
+    const { result } = await renderUseLazyLoad({ initialLimit: () => 1 + 1 });
+
+    await act(result.current.loadMore);
+    expect(result.current.elements).toEqual(animalsMockData.slice(0, 2));
+    expect(result.current.reachedEnd).toBe(true);
+
+});
+
+
+test("should do nothing if currently fetching or having reached the end", async () => {
+    const f = jest.fn(() => { throw new Error(); });
+    const { result } = await renderUseLazyLoad({ initialFunc: f });
+
+    await act(result.current.loadMore);
+    expect(result.current.reachedEnd).toBe(true);
+    expect(f).toHaveBeenCalledTimes(1);
+
+    await act(result.current.loadMore);
+    expect(f).toHaveBeenCalledTimes(1);
 });
 

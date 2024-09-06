@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export interface LazyLoadState<T> {
     /** Calling this function triggers fetching more items an updating the hook state. Calling this function while
@@ -87,7 +87,7 @@ function useLazyLoad<T>(
     const [isFetching, setIsFetching] = useState(false);
     const [reachedEnd, setReachedEnd] = useState(false);
 
-    const loadMore = useCallback(async () => {
+    const loadMore = async () => {
         if (isFetching || reachedEnd) return;
         setIsFetching(true);
         let newElements: T[] = [];
@@ -112,7 +112,11 @@ function useLazyLoad<T>(
         });
         fetchCount.current += 1;
         setIsFetching(false);
-    }, [elementLimit, batchSize, truncate]);
+    };
+
+    useEffect(() => {
+        setReachedEnd(elementLimit <= elements.length);
+    }, [elementLimit]);
 
     return {
         loadMore,
