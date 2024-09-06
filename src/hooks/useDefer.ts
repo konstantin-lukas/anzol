@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 /**
  * Delays the update of a value until the input has stopped changing for a certain time. This is different
- * from React's builtin useDeferredValue because you can set the delay yourself.
+ * from React's built-in useDeferredValue because you can set the delay yourself.
  *
  * @param input The value to defer and output.
  * @param delay The amount of time to wait after input has stopped changing before outputting it.

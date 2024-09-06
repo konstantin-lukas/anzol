@@ -22,20 +22,19 @@ directory.
 Anzol is built alongside automated tests to ensure quality.
 
 ## Currently Available Hooks
-- <b>useFetch:</b> Fetches data without showing stale responses and allows writing easy-to-understand code that 
-communicates intention.
-- <b>useDefer:</b> Delays the update of a value until that value has stopped changing for a chosen amount of time.
-- <b>useFirstRender:</b> Returns true on the first render and false otherwise.
-- <b>useToggle:</b> Provides a simple boolean toggle that does not persist between page reloads.
-- <b>useIntersectionObserver:</b> Provides a wrapper around the IntersectionObserver API, allowing you to test if an
-element is currently visible on screen.
+- <b>useFetch:</b> Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
+  started before the previous has finished to prevent flickering of stale responses by default.
+- <b>useDefer:</b> Delays the update of a value until the input has stopped changing for a certain time. This is different 
+  from React's built-in useDeferredValue because you can set the delay yourself.
+- <b>useFirstRender:</b> Returns true on first render; false otherwise.
+- <b>useToggle:</b> Provides a boolean toggle that does not persist between page reloads.
+- <b>useIntersectionObserver:</b> Provides a hook API that wraps the IntersectionObserver API. This hook is for use with a single element only. For
+  simplicity this is the recommended approach. If you have an extremely large number of objects to observe and want
+  to avoid creating an IntersectionObserver for each, refer to useIntersectionObserverArray to use a single observer
+  for multiple elements with a common root.
 - <b>useIntersectionObserverArray:</b> Like useIntersectionObserver but for multiple elements.
-- <b>useEvent:</b> Encapsulates the code needed to correctly listen to events in React, including event listener
-cleanup.
-- <b>useLazyLoad:</b> Takes a batch size and a max element count, and provides a function to add elements. Allows you to
-pass in a callback function to transform elements. The hook keeps track of the elements and returns a transformed list
-of all elements, as well as a flag indicating whether the end of content was reached. This flag will be set to true
-when the given max element count is reached or an added batch is shorter than the batch size.
+- <b>useEvent:</b> Provides a wrapper around the EventListener API. Use the return value to define the event target.
+- <b>useLazyLoad:</b> Provides a simple API for fetching data from a resource in batches.
 
 ## Installation
 Anzol is available on the NPM registry. To install it, just run:
