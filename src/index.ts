@@ -34,6 +34,11 @@ export {
 
 export {
     default as useLazyLoad,
-    LazyLoadState,
-    LazyLoadOptions,
+    type LazyLoadState,
+    type LazyLoadOptions,
 } from "./hooks/useLazyLoad";
+
+export {
+    default as useLocalStorage,
+    type LocalStorageOptions,
+} from "./hooks/useLocalStorage";

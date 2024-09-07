@@ -1,9 +1,9 @@
 import React from 'react';
-import DemoUseLazyLoad from "./components/demoUseLazyLoad";
+import DemoUseLocalStorage from "./components/demoUseLocalStorage";
 
 const App: React.FC = () => {
     return (
-        <DemoUseLazyLoad/>
+        <DemoUseLocalStorage/>
     );
 };
 
