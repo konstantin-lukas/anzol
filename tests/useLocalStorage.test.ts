@@ -86,7 +86,7 @@ test("should allow switching between keys", async () => {
     expect(result2.current[0]).toBe("Apples");
 });
 
-test("should not emit more events than necessarya", async () => {
+test("should not emit more events than necessary", async () => {
     Object.defineProperty(window, "localStorage", {
         value: {
             setItem: jest.fn(),
