@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/anzol_logo_white_clear_zone.svg">
     <source media="(prefers-color-scheme: light)" srcset="assets/anzol_logo_blue_clear_zone.svg">
-    <img src="assets/anzol_logo_blue_clear_zone.svg" alt="Logo" width="50%" height="50%">
+    <img src="assets/anzol_logo_blue_clear_zone.svg" alt="" width="50%" height="50%">
   </picture>
 
 [![NPM Package](https://img.shields.io/npm/v/anzol?style=flat-square&logo=npm)](https://www.npmjs.com/package/anzol)
