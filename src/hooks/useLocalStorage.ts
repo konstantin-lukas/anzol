@@ -1,6 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState, useMemo } from "react";
-import { useFirstRender } from "../index";
 
 export interface LocalStorageOptions {
     /** If there is no value for the specified {@link key}, it automatically set this value on mount. */
