@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState, useMemo } from "react";
+import { useFirstRender } from "../index";
 
 export interface LocalStorageOptions {
     /** If there is no value for the specified {@link key}, it automatically set this value on mount. */
@@ -37,7 +38,13 @@ function useLocalStorage(key: string, {
     listenForChanges = false,
 }: LocalStorageOptions = {}): [string | null, Dispatch<SetStateAction<string | null>>] {
 
-    const [value, setValue] = useState(localStorage.getItem(key) || initialValue || null);
+    const [value, setValue] = useState(() => {
+        const storedValue = localStorage.getItem(key);
+        if (storedValue) return storedValue;
+        const init = initialValue || null;
+        if (init) localStorage.setItem(key, init);
+        return init;
+    });
     const [blockUpdates, setBlockUpdates] = useState(true);
     const id = useMemo(() => instanceCount++, []);
 

@@ -35,6 +35,8 @@ Anzol is built alongside automated tests to ensure quality.
 - <b>useIntersectionObserverArray:</b> Like useIntersectionObserver but for multiple elements.
 - <b>useEvent:</b> Provides a wrapper around the EventListener API. Use the return value to define the event target.
 - <b>useLazyLoad:</b> Provides a simple API for fetching data from a resource in batches.
+- <b>useLocalStorage:</b> Provides access to local storage, with the additional option to update all usages of this hook
+  when local storage changes.
 
 ## Installation
 Anzol is available on the NPM registry. To install it, just run:
@@ -47,8 +49,6 @@ These features are not yet implement but we plan to do so in the foreseeable fut
 suggestions.
 - <b>useClickOutside:</b> Takes a reference to an HTML element and a callback function, and calls that function when the 
 user clicks anywhere outside the given element.
-- <b>useLocalStorage:</b> Provides access to local storage, with the additional option to update all usages of this hook 
-when local storage changes.
 - <b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.
 - <b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically 
 updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
