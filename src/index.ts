@@ -42,3 +42,8 @@ export {
     default as useLocalStorage,
     type LocalStorageOptions,
 } from "./hooks/useLocalStorage";
+
+export {
+    default as useClickOutside,
+    type ClickOutsideOptions,
+} from "./hooks/useClickOutside";

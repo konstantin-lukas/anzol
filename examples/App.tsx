@@ -1,9 +1,9 @@
 import React from 'react';
-import DemoUseLocalStorage from "./components/demoUseLocalStorage";
+import DemoUseClickOutside from "./components/demoUseClickOutside";
 
 const App: React.FC = () => {
     return (
-        <DemoUseLocalStorage/>
+        <DemoUseClickOutside/>
     );
 };
 
