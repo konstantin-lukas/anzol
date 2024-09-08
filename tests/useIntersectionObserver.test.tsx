@@ -17,20 +17,23 @@ function IntersectionComponent() {
     );
 }
 
-test("mount and unmount the IntersectionObserver to the target element", () => {
-    const { unmount } = render(<IntersectionComponent/>);
-    const targetDiv = screen.getByTestId("target-div");
-    expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv);
-    unmount();
-    expect(IntersectionObserver.prototype.disconnect).toHaveBeenCalled();
-});
 
-test("change state when intersection changes", () => {
-    render(<IntersectionComponent/>);
-    const targetDiv = screen.getByTestId("target-div");
-    expect(targetDiv.innerHTML).toBe("off");
-    act(() => {
-        io.enterNode(targetDiv);
+describe("useIntersectionObserver", () => {
+    test("mount and unmount the IntersectionObserver to the target element", () => {
+        const { unmount } = render(<IntersectionComponent/>);
+        const targetDiv = screen.getByTestId("target-div");
+        expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv);
+        unmount();
+        expect(IntersectionObserver.prototype.disconnect).toHaveBeenCalled();
     });
-    expect(targetDiv.innerHTML).toBe("on");
+
+    test("change state when intersection changes", () => {
+        render(<IntersectionComponent/>);
+        const targetDiv = screen.getByTestId("target-div");
+        expect(targetDiv.innerHTML).toBe("off");
+        act(() => {
+            io.enterNode(targetDiv);
+        });
+        expect(targetDiv.innerHTML).toBe("on");
+    });
 });

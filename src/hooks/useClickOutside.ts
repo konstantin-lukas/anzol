@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 
+export type ClickOutsideEvent = "click" | "dblclick" | "mousedown" | "mouseup" | "pointerdown" | "pointerup";
+
 export interface ClickOutsideOptions {
-    eventType?: "click" | "dblclick" | "mousedown" | "mouseup" | "pointerdown" | "pointerup",
+    eventType?: ClickOutsideEvent,
     includeChildren?: boolean,
 }
 
@@ -38,7 +40,7 @@ function useClickOutside(callback: (e: (MouseEvent | PointerEvent)) => void, {
         const eventHandler = (e: (MouseEvent | PointerEvent)) => {
             if (ref.current) {
                 if (
-                    includeChildren && (ref.current as Element)?.contains(e.target as Element)
+                    includeChildren && (ref.current as Element).contains(e.target as Element)
                     || !includeChildren && ref.current === e.target
                 ) return;
                 callback(e);

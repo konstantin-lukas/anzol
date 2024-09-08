@@ -26,30 +26,32 @@ function IntersectionComponent() {
     );
 }
 
-test("mount and unmount the IntersectionObserver to the target elements", () => {
-    const { unmount } = render(<IntersectionComponent/>);
-    const targetDiv1 = screen.getByTestId("target-div1");
-    const targetDiv2 = screen.getByTestId("target-div2");
-    expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv1);
-    expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv2);
-    unmount();
-    expect(IntersectionObserver.prototype.disconnect).toHaveBeenCalled();
-});
+describe("useIntersectionObserverArray", () => {
+    test("mount and unmount the IntersectionObserver to the target elements", () => {
+        const { unmount } = render(<IntersectionComponent/>);
+        const targetDiv1 = screen.getByTestId("target-div1");
+        const targetDiv2 = screen.getByTestId("target-div2");
+        expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv1);
+        expect(IntersectionObserver.prototype.observe).toHaveBeenCalledWith(targetDiv2);
+        unmount();
+        expect(IntersectionObserver.prototype.disconnect).toHaveBeenCalled();
+    });
 
-test("change state when intersection changes", () => {
-    render(<IntersectionComponent/>);
-    const targetDiv1 = screen.getByTestId("target-div1");
-    const targetDiv2 = screen.getByTestId("target-div2");
-    expect(targetDiv1.innerHTML).toBe("off");
-    expect(targetDiv2.innerHTML).toBe("off");
-    act(() => {
-        io.enterNode(targetDiv1);
+    test("change state when intersection changes", () => {
+        render(<IntersectionComponent/>);
+        const targetDiv1 = screen.getByTestId("target-div1");
+        const targetDiv2 = screen.getByTestId("target-div2");
+        expect(targetDiv1.innerHTML).toBe("off");
+        expect(targetDiv2.innerHTML).toBe("off");
+        act(() => {
+            io.enterNode(targetDiv1);
+        });
+        expect(targetDiv1.innerHTML).toBe("off");
+        expect(targetDiv2.innerHTML).toBe("off");
+        act(() => {
+            io.enterNode(targetDiv2);
+        });
+        expect(targetDiv1.innerHTML).toBe("on");
+        expect(targetDiv2.innerHTML).toBe("on");
     });
-    expect(targetDiv1.innerHTML).toBe("off");
-    expect(targetDiv2.innerHTML).toBe("off");
-    act(() => {
-        io.enterNode(targetDiv2);
-    });
-    expect(targetDiv1.innerHTML).toBe("on");
-    expect(targetDiv2.innerHTML).toBe("on");
 });

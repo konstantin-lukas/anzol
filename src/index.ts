@@ -46,4 +46,5 @@ export {
 export {
     default as useClickOutside,
     type ClickOutsideOptions,
+    type ClickOutsideEvent,
 } from "./hooks/useClickOutside";
