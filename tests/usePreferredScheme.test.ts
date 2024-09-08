@@ -33,7 +33,7 @@ describe("usePreferredScheme", () => {
         expect(result.current).toBe("light");
     });
 
-    test("should change use the current preferred scheme by default", async () => {
+    test("should use the current preferred scheme by default", async () => {
         defineMock(true);
         const { result } = await act(async () => {
             return renderHook(() => usePreferredScheme());

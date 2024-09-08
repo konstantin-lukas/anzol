@@ -70,7 +70,7 @@ function useDarkMode({
 
     return {
         setTheme: (selectedTheme: "light" | "dark") => setTheme(selectedTheme),
-        toggleTheme: () => { setTheme(prevState => prevState === "light" ? "dark" : "light"); },
+        toggleTheme: () => setTheme(prevState => prevState === "light" ? "dark" : "light"),
         theme,
     };
 }
