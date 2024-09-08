@@ -48,3 +48,7 @@ export {
     type ClickOutsideOptions,
     type ClickOutsideEvent,
 } from "./hooks/useClickOutside";
+
+export {
+    default as usePreferredScheme,
+} from "./hooks/usePreferredScheme";

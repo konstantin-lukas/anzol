@@ -1,9 +1,9 @@
 import React from 'react';
-import DemoUseClickOutside from "./components/demoUseClickOutside";
+import DemoUsePreferredScheme from "./components/demoUsePreferredScheme";
 
 const App: React.FC = () => {
     return (
-        <DemoUseClickOutside/>
+        <DemoUsePreferredScheme/>
     );
 };
 
