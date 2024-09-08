@@ -1,9 +1,9 @@
 import React from 'react';
-import DemoUsePreferredScheme from "./components/demoUsePreferredScheme";
+import DemoUseDarkMode from "./components/demoUseDarkMode";
 
 const App: React.FC = () => {
     return (
-        <DemoUsePreferredScheme/>
+        <DemoUseDarkMode/>
     );
 };
 

@@ -3,7 +3,10 @@ import { useEffect, useRef } from "react";
 export type ClickOutsideEvent = "click" | "dblclick" | "mousedown" | "mouseup" | "pointerdown" | "pointerup";
 
 export interface ClickOutsideOptions {
+    /** The type of event to use for detecting clicks. Default is "click". */
     eventType?: ClickOutsideEvent,
+    /** If set to true, a click on a child of the target element will count as a click on the
+     target element and not trigger the callback. */
     includeChildren?: boolean,
 }
 
@@ -12,9 +15,7 @@ export interface ClickOutsideOptions {
  * @param callback - A function to execute when the user click's outside the specified element. As a parameter it takes
  * an event which is either a MouseEvent or PointerEvent depending on the {@link eventType} specified. The e.target
  * property will contain the element that was clicked.
- * @param eventType - The type of event to use for detecting clicks. Default is "click".
- * @param includeChildren - If set to true, a click on a child of the target element will count as a click on the
- * target element and not trigger the callback.
+ * @param options - Allows configuring how the hook works.
  * @return A reference you need to attach to the element to target. Can be used as a normal ref as well.
  * ```tsx
  * const DemoUseClickOutside = () => {

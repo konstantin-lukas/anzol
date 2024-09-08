@@ -21,6 +21,12 @@ directory.
 
 Anzol is built alongside automated tests to ensure quality.
 
+## Installation
+Anzol is available on the NPM registry. To install it, just run:
+```bash
+npm install anzol
+```
+
 ## Currently Available Hooks
 - <b>useFetch:</b> Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
   started before the previous has finished to prevent flickering of stale responses by default.
@@ -40,15 +46,5 @@ Anzol is built alongside automated tests to ensure quality.
 - <b>useClickOutside:</b> Provides a ref to attach to an HTML element and takes a callback function, and calls that
   function when the user clicks anywhere outside the given element.
 - <b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.
-
-## Installation
-Anzol is available on the NPM registry. To install it, just run:
-```bash
-npm install anzol
-```
-
-## Planned features
-These features are not yet implement but we plan to do so in the foreseeable future. Feel free to make your own 
-suggestions.
-- <b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically 
-updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
+- <b>useDarkMode:</b> Similar to usePreferredScheme but allows setting the user scheme manually and automatically
+  updates it when the preferred scheme changes. Uses local storage to save the chosen scheme across reloads.
