@@ -416,4 +416,31 @@ describe("useFetch", () => {
             expect(retryTimeoutNoLimit).not.toHaveBeenCalledTimes(0);
         });
     });
+
+    test("should allow preventing fetches via the pre fetch callback", async () => {
+        global.fetch = jest.fn(async () => {
+            await new Promise((r) => setTimeout(r, 0));
+            return Promise.resolve({
+                ok: false,
+                status: 404,
+            });
+        }) as jest.Mock;
+
+        const callback = jest.fn((setState) => {
+            setState("banana");
+            return false;
+        });
+
+        const { result } = renderHook(() => useFetch("/api", { preFetchCallback: callback }));
+
+        expect(result.current.data).toEqual("banana");
+        expect(result.current.loading).toBe(false);
+        expect(result.current.ok).toBe(false);
+        expect(result.current.status).toEqual(undefined);
+        await waitFor(() => {
+            expect(callback).toHaveBeenCalledTimes(1);
+        });
+        expect(global.fetch).not.toHaveBeenCalled();
+
+    });
 });

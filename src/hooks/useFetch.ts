@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 
 /** Possible return types depending on how the result is parsed. */
@@ -22,7 +23,7 @@ export interface FetchResult<T = FetchResultData> {
     status: number | undefined
 }
 
-export interface FetchOptions {
+export interface FetchOptions<T> {
     /** How to parse the result (determines type of returned data). Set to "response" if you
      * don't want to extract the data automatically and receive the response object instead. */
     parseType?: ParseType,
@@ -37,6 +38,12 @@ export interface FetchOptions {
      * to re-fetch on failure. If the function returns undefined, it stops the hook from re-fetching again until an
      * input parameter to the hook changes and resets the internal retry counter.*/
     retryTimeout?: (attempt: number) => number | undefined,
+    /** This callback gets called before fetching. It gives you access to the setter function for the data and the url
+     * to fetch. The return value of this function is a boolean indicating whether to perform a fetch from the new
+     * url. The intended use for this hook is mostly to prevent fetching from URLs that you know are going
+     * to return a non-200 result. In that case you can keep the previous state or set some empty state depending on
+     * your use case. You can of course also just use this hook to execute some arbitrary code before fetching. */
+    preFetchCallback?: (setState:  Dispatch<SetStateAction<T | undefined>>, newUrl: string) => boolean,
 }
 /**
  * Fetches the provided URL and optionally parses the response. Aborts requests when a new request is
@@ -87,7 +94,8 @@ function useFetch<T = FetchResultData>(
         requestOptions = {},
         discardStaleRequests = true,
         retryTimeout = undefined,
-    }: FetchOptions = {},
+        preFetchCallback = undefined,
+    }: FetchOptions<T> = {},
 ): FetchResult<T | undefined> {
     const [status, setStatus] = useState<number>();
     const [ok, setOk] = useState<boolean>(false);
@@ -100,6 +108,8 @@ function useFetch<T = FetchResultData>(
     }, [url, parseType, discardStaleRequests, retryTimeout]);
 
     useEffect(() => {
+        const performFetch = typeof preFetchCallback !== "function" || preFetchCallback(setData, url);
+        if (!performFetch) return;
         const abortController = new AbortController();
         const { signal } = abortController;
         (async () => {
