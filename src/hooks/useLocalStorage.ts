@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useId } from "react";
 
 export interface LocalStorageOptions {
     /** If there is no value for the specified {@link key}, it automatically set this value on mount. */
@@ -12,8 +12,6 @@ export interface LocalStorageOptions {
      updates its state accordingly. */
     listenForChanges?: boolean,
 }
-
-let instanceCount = 0;
 
 /**
  * Provides a wrapper around the localStorage API. Additionally, allows you to listen to changes between different
@@ -45,7 +43,7 @@ function useLocalStorage(key: string, {
         return init;
     });
     const [blockUpdates, setBlockUpdates] = useState(true);
-    const id = useMemo(() => instanceCount++, []);
+    const id = useId();
 
     useEffect(() => {
         if (!blockUpdates) {
