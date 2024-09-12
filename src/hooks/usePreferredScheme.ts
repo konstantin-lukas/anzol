@@ -19,12 +19,13 @@ import { useEffect, useState } from "react";
  * ```
  */
 function usePreferredScheme(): "light" | "dark" {
-    const [theme, setTheme] = useState<"light" | "dark">(
+    const [theme, setTheme] = useState<"light" | "dark">(typeof window === "undefined" ? "light" :
         window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
             : "light",
     );
     useEffect(() => {
+        if (typeof window === "undefined") return;
         const matchPreferredScheme = (e: MediaQueryListEvent) => setTheme(e.matches ? "dark" : "light");
         window
             .matchMedia("(prefers-color-scheme: dark)")

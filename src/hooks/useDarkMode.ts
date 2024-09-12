@@ -47,12 +47,13 @@ function useDarkMode({
     persistStateInLocalStorage?: boolean,
 } = {}): DarkModeState {
     const preferredScheme = usePreferredScheme();
-    const [theme, setTheme] = useState((persistStateInLocalStorage
+    const [theme, setTheme] = useState(typeof window === "undefined" ? "light" : ((persistStateInLocalStorage
         ? localStorage.getItem("anzol-dark-mode-hook") ?? defaultTheme ?? preferredScheme
-        : defaultTheme ?? preferredScheme) as "light" | "dark",
+        : defaultTheme ?? preferredScheme) as "light" | "dark"),
     );
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         if (updateOnPreferredSchemeChange) {
             const matchPreferredScheme = (e: MediaQueryListEvent) => setTheme(e.matches ? "dark" : "light");
             window
@@ -65,6 +66,7 @@ function useDarkMode({
     }, [updateOnPreferredSchemeChange, preferredScheme]);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         if (persistStateInLocalStorage) localStorage.setItem("anzol-dark-mode-hook", theme);
     }, [theme]);
 

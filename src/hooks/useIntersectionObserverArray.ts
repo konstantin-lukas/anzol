@@ -58,6 +58,7 @@ function useIntersectionObserverArray<T extends Element>({
     const ref = useRef<T[]>([]);
     const [entries, setEntries] = useState<(IntersectionObserverEntry | null)[]>([]);
     useEffect(() => {
+        if (typeof IntersectionObserver === "undefined") return;
         if (ref.current) {
             const observer = new IntersectionObserver(
                 (e) => {

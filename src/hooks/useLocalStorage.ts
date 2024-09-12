@@ -36,6 +36,7 @@ function useLocalStorage(key: string, {
 }: LocalStorageOptions = {}): [string | null, Dispatch<SetStateAction<string | null>>] {
 
     const [value, setValue] = useState(() => {
+        if (typeof window === "undefined") return null;
         const storedValue = localStorage.getItem(key);
         if (storedValue) return storedValue;
         const init = initialValue || null;
@@ -46,6 +47,7 @@ function useLocalStorage(key: string, {
     const id = useId();
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         if (!blockUpdates) {
             if (value === null)
                 localStorage.removeItem(key);
@@ -62,6 +64,7 @@ function useLocalStorage(key: string, {
     }, [value]);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         setValue(localStorage.getItem(key) || initialValue || null);
         if (listenForChanges) {
             const handleStorageChange = (event: CustomEvent) => {

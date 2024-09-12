@@ -45,6 +45,7 @@ function useIntersectionObserver<T extends Element>({
     const ref = useRef<T | null>(null);
     const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
     useEffect(() => {
+        if (typeof IntersectionObserver === "undefined") return;
         if (ref.current) {
             const observer = new IntersectionObserver(
                 (e) => setEntry(e[0]),
