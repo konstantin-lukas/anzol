@@ -23,6 +23,11 @@ async function renderUseLocalStorage({
 }
 
 describe("useLocalStorage", () => {
+
+    afterEach(() => {
+        localStorage.clear();
+    });
+    
     test("should set a default value when local storage item doesn't exist", async () => {
         const { result } = await renderUseLocalStorage({ initialKey: "animal", initialOptions: { initialValue: "Bear" }});
         expect(result.current[0]).toBe("Bear");

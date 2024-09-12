@@ -28,23 +28,27 @@ export interface LocalStorageOptions {
  *     return <input type="text" value={value ?? ""} onChange={(e) => setValue(e.target.value)} />;
  * }
  * ```
-*/
+ */
 function useLocalStorage(key: string, {
     initialValue,
     propagateChanges = false,
     listenForChanges = false,
 }: LocalStorageOptions = {}): [string | null, Dispatch<SetStateAction<string | null>>] {
 
-    const [value, setValue] = useState(() => {
-        if (typeof window === "undefined") return null;
-        const storedValue = localStorage.getItem(key);
-        if (storedValue) return storedValue;
-        const init = initialValue || null;
-        if (init) localStorage.setItem(key, init);
-        return init;
-    });
+    const [value, setValue] = useState<string | null>(null);
     const [blockUpdates, setBlockUpdates] = useState(true);
     const id = useId();
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        setValue(() => {
+            const storedValue = localStorage.getItem(key);
+            if (storedValue) return storedValue;
+            const init = initialValue || null;
+            if (init) localStorage.setItem(key, init);
+            return init;
+        });
+    }, [key, initialValue]);
 
     useEffect(() => {
         if (typeof window === "undefined") return;
