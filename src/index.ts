@@ -56,4 +56,5 @@ export {
 export {
     default as useDarkMode,
     type DarkModeState,
+    type DarkModeOptions,
 } from "./hooks/useDarkMode";
