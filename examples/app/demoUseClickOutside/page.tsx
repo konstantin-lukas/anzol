@@ -1,7 +1,9 @@
-import React from 'react';
-import {useClickOutside} from "../../src";
+"use client";
 
-const DemoUseClickOutside = () => {
+import React from 'react';
+import {useClickOutside} from "@/../src";
+
+const Page = () => {
     const ref = useClickOutside(e => (e.target as HTMLElement).style.backgroundColor = "black");
     return (
         <div style={{padding: '50px', backgroundColor: 'red'}}>
@@ -14,4 +16,4 @@ const DemoUseClickOutside = () => {
     );
 };
 
-export default DemoUseClickOutside;
+export default Page;

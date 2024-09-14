@@ -1,7 +1,9 @@
-import React, {ReactNode} from 'react';
-import useLazyLoad from "../../src/hooks/useLazyLoad";
+"use client";
 
-const DemoUseLazyLoad = () => {
+import React, {ReactNode} from 'react';
+import {useLazyLoad} from "@/../src";
+
+const Page = () => {
     const { loadMore, elements, reachedEnd, isFetching, clear } = useLazyLoad<ReactNode>(35, async (performedFetches) => {
         const data = await fetch(`https://api.artic.edu/api/v1/artworks?page=${performedFetches + 1}&limit=10`);
         const parsedData = await data.json();
@@ -21,4 +23,4 @@ const DemoUseLazyLoad = () => {
     );
 };
 
-export default DemoUseLazyLoad;
+export default Page;

@@ -38,7 +38,6 @@ function useClickOutside(callback: (e: (MouseEvent | PointerEvent)) => void, {
 }: ClickOutsideOptions = {}) {
     const ref = useRef(null);
     useEffect(() => {
-        if (typeof window === "undefined") return;
         const eventHandler = (e: (MouseEvent | PointerEvent)) => {
             if (ref.current) {
                 if (

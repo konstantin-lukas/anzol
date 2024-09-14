@@ -24,6 +24,33 @@ async function renderUseLocalStorage({
 
 describe("useLocalStorage", () => {
 
+    const localStorageMock = (() => {
+        let store: Record<string, string> = {};
+
+        return {
+            getItem: (key: string) => store[key] || null,
+            setItem: (key: string, value: string) => {
+                store[key] = value;
+            },
+            removeItem: (key: string) => {
+                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+                delete store[key];
+            },
+            clear: () => {
+                store = {};
+            },
+        };
+    })();
+
+    // Mock the global window localStorage object
+    beforeEach(() => {
+        Object.defineProperty(window, "localStorage", {
+            value: localStorageMock,
+            writable: true,
+        });
+        localStorage.clear();
+    });
+
     afterEach(() => {
         localStorage.clear();
     });
@@ -115,5 +142,47 @@ describe("useLocalStorage", () => {
         act(() => result1.current[1]("Eagle"));
         act(() => result2.current[1]("Unicorn"));
         expect(setItemSpy).toHaveBeenCalledTimes(2);
+    });
+
+    test("should support SSG", async () => {
+        const { result } = await renderUseLocalStorage({
+            initialKey: "animal", initialOptions: { initialValue: "Bear", SSR: false },
+        });
+        expect(result.current[0]).toBe("Bear");
+        expect(window.localStorage.getItem("animal")).toBe("Bear");
+    });
+
+    test("should support SSG without an initial value and existing local storage key", async () => {
+        const { result } = await renderUseLocalStorage({
+            initialKey: "animal", initialOptions: { SSR: false },
+        });
+        expect(result.current[0]).toBe(null);
+        expect(window.localStorage.getItem("animal")).toBe(null);
+    });
+
+    test("should support SSG with an initial value and existing local storage key", async () => {
+        const { result } = await renderUseLocalStorage({
+            initialKey: "animal", initialOptions: { SSR: false, initialValue: "Bear" },
+        });
+        expect(result.current[0]).toBe("Bear");
+        expect(window.localStorage.getItem("animal")).toBe("Bear");
+    });
+
+    test("should support SSG without an initial value but with an existing local storage key", async () => {
+        localStorage.setItem("animal", "Bear");
+        const { result } = await renderUseLocalStorage({
+            initialKey: "animal", initialOptions: { SSR: false },
+        });
+        expect(result.current[0]).toBe("Bear");
+        expect(window.localStorage.getItem("animal")).toBe("Bear");
+    });
+
+    test("should support SSG with an initial value but with an existing local storage key", async () => {
+        localStorage.setItem("animal", "Giraffe");
+        const { result } = await renderUseLocalStorage({
+            initialKey: "animal", initialOptions: { SSR: false, initialValue: "Bear" },
+        });
+        expect(result.current[0]).toBe("Giraffe");
+        expect(window.localStorage.getItem("animal")).toBe("Giraffe");
     });
 });

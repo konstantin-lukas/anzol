@@ -11,6 +11,13 @@ export interface LocalStorageOptions {
     /** If this parameter is true, the hook listens for changes of the specified {@link key} and
      updates its state accordingly. */
     listenForChanges?: boolean,
+    /** This parameter which is true by default determines if the hook should take the necessary steps to avoid
+     * hydration errors when using SSR. This results in the initial state being null on the first render even if there
+     * is a value in local storage. On consecutive renders the correct value will be returned. Note that components
+     * with "use client" in Next.js are still pre-rendered on the server. Only set this variable to false, if you are
+     * rendering on the client only. What this will do, it will return the correct value from local storage on the first
+     * render. This can lead to hydration errors when using SSR because local storage doesn't exist on the server. */
+    SSR?: boolean
 }
 
 /**
@@ -23,7 +30,7 @@ export interface LocalStorageOptions {
  *
  * @example
  * ```tsx
- * function DemoUseLocalStorage() {
+ * function Page() {
  *     const [value, setValue] = useLocalStorage("value");
  *     return <input type="text" value={value ?? ""} onChange={(e) => setValue(e.target.value)} />;
  * }
@@ -33,25 +40,33 @@ function useLocalStorage(key: string, {
     initialValue,
     propagateChanges = false,
     listenForChanges = false,
+    SSR = true,
 }: LocalStorageOptions = {}): [string | null, Dispatch<SetStateAction<string | null>>] {
 
-    const [value, setValue] = useState<string | null>(null);
+    const [value, setValue] = useState<string | null>(() => {
+        if (SSR || typeof localStorage === "undefined") return null;
+        const storedValue = localStorage.getItem(key);
+        if (storedValue) return storedValue;
+        const init = initialValue || null;
+        if (init) localStorage.setItem(key, init);
+        return init;
+    });
     const [blockUpdates, setBlockUpdates] = useState(true);
     const id = useId();
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-        setValue(() => {
-            const storedValue = localStorage.getItem(key);
-            if (storedValue) return storedValue;
-            const init = initialValue || null;
-            if (init) localStorage.setItem(key, init);
-            return init;
-        });
+        if (SSR) {
+            setValue(() => {
+                const storedValue = localStorage.getItem(key);
+                if (storedValue) return storedValue;
+                const init = initialValue || null;
+                if (init !== null) localStorage.setItem(key, init);
+                return init;
+            });
+        }
     }, [key, initialValue]);
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
         if (!blockUpdates) {
             if (value === null)
                 localStorage.removeItem(key);
@@ -68,7 +83,6 @@ function useLocalStorage(key: string, {
     }, [value]);
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
         setValue(localStorage.getItem(key) || initialValue || null);
         if (listenForChanges) {
             const handleStorageChange = (event: CustomEvent) => {

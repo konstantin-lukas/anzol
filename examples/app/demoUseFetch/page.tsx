@@ -1,14 +1,16 @@
-import React, {useMemo, useState} from 'react';
-import useFetch from "../../src/hooks/useFetch";
+"use client";
 
-const DemoUseFetch = () => {
+import React, {useMemo, useState} from 'react';
+import {useFetch} from "@/../src";
+
+const Page = () => {
     const [value, setValue] = useState("");
     const {loading, data} = useFetch<{
         data: { title: string }[]
     }>(
         "https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(value)
     );
-    const list = useMemo(() => data?.data.map((e: any, i: number) => <li key={i}>{e.title}</li>), [data]);
+    const list = useMemo(() => data?.data.map((e: { title: string }, i: number) => <li key={i}>{e.title}</li>), [data]);
     return (
         <div>
             <input
@@ -23,4 +25,4 @@ const DemoUseFetch = () => {
     );
 };
 
-export default DemoUseFetch;
+export default Page;

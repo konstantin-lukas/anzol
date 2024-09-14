@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
-import useDefer from "../../src/hooks/useDefer";
+"use client";
 
-const DemoUseDefer = () => {
+import React, {useState} from 'react';
+import {useDefer} from "@/../src";
+
+const Page = () => {
     const [value, setValue] = useState("");
     const displayValue = useDefer(value, 500);
     return (
@@ -18,4 +20,4 @@ const DemoUseDefer = () => {
     );
 };
 
-export default DemoUseDefer;
+export default Page;

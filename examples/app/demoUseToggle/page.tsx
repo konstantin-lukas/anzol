@@ -1,7 +1,9 @@
-import React from 'react';
-import useToggle from "../../src/hooks/useToggle";
+"use client";
 
-const DemoUseToggle = () => {
+import React from 'react';
+import {useToggle} from "@/../src";
+
+const Page = () => {
     const [state, toggle] = useToggle();
     return (
         <>
@@ -13,4 +15,4 @@ const DemoUseToggle = () => {
     );
 };
 
-export default DemoUseToggle;
+export default Page;

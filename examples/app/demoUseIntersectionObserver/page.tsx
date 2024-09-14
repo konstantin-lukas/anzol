@@ -1,7 +1,9 @@
-import React from 'react';
-import useIntersectionObserver from "../../src/hooks/useIntersectionObserver";
+"use client";
 
-const DemoUseIntersectionObserver = () => {
+import React from 'react';
+import {useIntersectionObserver} from "@/../src";
+
+const Page = () => {
     const [ref, entry] = useIntersectionObserver<HTMLDivElement>();
     return (
         <>
@@ -22,4 +24,4 @@ const DemoUseIntersectionObserver = () => {
     );
 };
 
-export default DemoUseIntersectionObserver;
+export default Page;

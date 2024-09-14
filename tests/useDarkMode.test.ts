@@ -25,7 +25,7 @@ describe("useDarkMode", () => {
     test("should use the current preferred scheme (light) by default", async () => {
         defineMock(false);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode());
+            return renderHook(() => useDarkMode({ SSR: false }));
         });
         expect(result.current.theme).toBe("light");
     });
@@ -33,7 +33,7 @@ describe("useDarkMode", () => {
     test("should use the current preferred scheme (dark) by default", async () => {
         defineMock(true);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode());
+            return renderHook(() => useDarkMode({ SSR: false }));
         });
         expect(result.current.theme).toBe("dark");
     });
@@ -51,7 +51,10 @@ describe("useDarkMode", () => {
         localStorage.setItem("anzol-dark-mode-hook", "light");
         defineMock(true);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode({ persistStateInLocalStorage: false }));
+            return renderHook(() => useDarkMode({
+                persistStateInLocalStorage: false,
+                SSR: false,
+            }));
         });
         expect(result.current.theme).toBe("dark");
     });
@@ -77,7 +80,7 @@ describe("useDarkMode", () => {
     test("should update its state when the preferred scheme changes", async () => {
         defineMock(false);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode());
+            return renderHook(() => useDarkMode({ SSR: false }));
         });
         expect(result.current.theme).toBe("light");
         act(() => triggerChange({ matches: true }));
@@ -89,7 +92,10 @@ describe("useDarkMode", () => {
     test("should not update its state when the preferred scheme changes if configured to do so", async () => {
         defineMock(false);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode({ updateOnPreferredSchemeChange: false }));
+            return renderHook(() => useDarkMode({
+                updateOnPreferredSchemeChange: false,
+                SSR: false,
+            }));
         });
         expect(result.current.theme).toBe("light");
         act(() => triggerChange({ matches: true }));
@@ -101,7 +107,10 @@ describe("useDarkMode", () => {
     test("should allow setting the theme", async () => {
         defineMock(false);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode({ updateOnPreferredSchemeChange: false }));
+            return renderHook(() => useDarkMode({
+                updateOnPreferredSchemeChange: false,
+                SSR: false,
+            }));
         });
         expect(result.current.theme).toBe("light");
         for (let i = 0; i < 2; i++) {
@@ -117,12 +126,57 @@ describe("useDarkMode", () => {
     test("should allow toggling the theme", async () => {
         defineMock(false);
         const { result } = await act(async () => {
-            return renderHook(() => useDarkMode({ updateOnPreferredSchemeChange: false }));
+            return renderHook(() => useDarkMode({
+                updateOnPreferredSchemeChange: false,
+                SSR: false,
+            }));
         });
         expect(result.current.theme).toBe("light");
         for (let i = 0; i < 5; i++) {
             act(() => result.current.toggleTheme());
             expect(result.current.theme).toBe(i % 2 === 0 ? "dark" : "light");
         }
+    });
+
+    test("should support SSR", async () => {
+        defineMock(false);
+        const { result } = await act(async () => {
+            return renderHook(() => useDarkMode({
+                updateOnPreferredSchemeChange: true,
+            }));
+        });
+        expect(result.current.theme).toBe(null);
+        act(() => triggerChange({ matches: true }));
+        expect(result.current.theme).toBe("dark");
+        act(() => triggerChange({ matches: false }));
+        expect(result.current.theme).toBe("light");
+    });
+
+    test("should support SSR without listening to preferred scheme changes", async () => {
+        defineMock(false);
+        const { result } = await act(async () => {
+            return renderHook(() => useDarkMode({
+                updateOnPreferredSchemeChange: false,
+            }));
+        });
+        expect(result.current.theme).toBe(null);
+        act(() => triggerChange({ matches: true }));
+        expect(result.current.theme).toBe(null);
+        act(() => triggerChange({ matches: false }));
+        expect(result.current.theme).toBe(null);
+    });
+
+    test("should support SSR even without using local storage", async () => {
+        defineMock(false);
+        const { result } = await act(async () => {
+            return renderHook(() => useDarkMode({
+                persistStateInLocalStorage: false,
+            }));
+        });
+        expect(result.current.theme).toBe(null);
+        act(() => triggerChange({ matches: true }));
+        expect(result.current.theme).toBe("dark");
+        act(() => triggerChange({ matches: false }));
+        expect(result.current.theme).toBe("light");
     });
 });

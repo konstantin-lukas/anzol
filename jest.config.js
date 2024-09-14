@@ -6,5 +6,5 @@ module.exports = {
     coverageReporters: ["lcov", "text"],
     collectCoverageFrom: ["**/src/hooks/*.ts"],
     verbose: true,
-    bail: 1
+    bail: 1,
 };

@@ -1,13 +1,15 @@
-import React, {useEffect} from "react";
-import { useEvent } from "../../src";
+"use client";
 
-const DemoUseEvent = () => {
+import React, {useEffect} from "react";
+import { useEvent } from "@/../src";
+
+const Page = () => {
     const clickTarget = useEvent<HTMLDivElement>("click", (e) => {
         const t = (e.target as HTMLDivElement);
         t.style.backgroundColor = t.style.backgroundColor === "red" ? "green" : "red";
     });
 
-    const windowTarget = useEvent("scroll", _ => console.log("scroll"));
+    const windowTarget = useEvent("scroll", () => console.log("scroll"));
     useEffect(() => {
         windowTarget(document);
     }, [windowTarget]);
@@ -28,4 +30,4 @@ const DemoUseEvent = () => {
     );
 };
 
-export default DemoUseEvent;
+export default Page;

@@ -1,7 +1,9 @@
-import React, {useMemo} from 'react';
-import useIntersectionObserverArray from "../../src/hooks/useIntersectionObserverArray";
+"use client";
 
-const DemoUseIntersectionObserverArray = () => {
+import React, {useMemo} from 'react';
+import {useIntersectionObserverArray} from "@/../src";
+
+const Page = () => {
     const [ref, entries] = useIntersectionObserverArray<HTMLDivElement>();
     const allInView = useMemo(
         () => entries.length > 0 && entries.every(x => x?.isIntersecting),
@@ -19,13 +21,13 @@ const DemoUseIntersectionObserverArray = () => {
             </h1>
 
             <div ref={el => {
-                if (el) ref.current[0] = el;
+                if (el && ref.current) ref.current[0] = el;
             }} style={{marginTop: "200vh", backgroundColor: "red"}}>
                 Hello, world!
             </div>
 
             <div ref={el => {
-                if (el) ref.current[1] = el;
+                if (el && ref.current) ref.current[1] = el;
             }} style={{marginTop: "20vh", marginBottom: "200vh", backgroundColor: "yellow"}}>
                 Hello, world!
             </div>
@@ -33,4 +35,4 @@ const DemoUseIntersectionObserverArray = () => {
     );
 };
 
-export default DemoUseIntersectionObserverArray;
+export default Page;

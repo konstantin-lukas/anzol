@@ -1,7 +1,9 @@
-import React from "react";
-import useDarkMode from "../../src/hooks/useDarkMode";
+"use client";
 
-const DemoUseDarkMode = () => {
+import React from "react";
+import {useDarkMode} from "@/../src";
+
+const Page = () => {
     const { theme, setTheme, toggleTheme } = useDarkMode();
     return (
         <div style={{
@@ -16,4 +18,4 @@ const DemoUseDarkMode = () => {
     );
 };
 
-export default DemoUseDarkMode;
+export default Page;
