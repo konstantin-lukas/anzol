@@ -71,8 +71,5 @@
     "react",
     "typescript",
     "hooks"
-  ],
-  "dependencies": {
-    "remove": "^0.1.5"
-  }
+  ]
 }
