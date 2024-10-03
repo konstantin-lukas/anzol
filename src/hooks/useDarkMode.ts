@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePreferredScheme } from "../index";
+import usePreferredScheme from "./usePreferredScheme";
 
 export interface DarkModeState {
     /** Sets the current theme to the value passed in as an argument. */
