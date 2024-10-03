@@ -11,8 +11,8 @@ export {
 } from "./hooks/useDefer";
 
 export {
-    default as useFirstRender,
-} from "./hooks/useFirstRender";
+    default as useHasMounted,
+} from "./hooks/useHasMounted";
 
 export {
     default as useToggle,
