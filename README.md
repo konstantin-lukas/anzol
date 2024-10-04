@@ -35,7 +35,7 @@ npm install anzol
   started before the previous has finished to prevent flickering of stale responses by default.
 - ✅ <b>useDefer:</b> Delays the update of a value until the input has stopped changing for a certain time. This is different 
   from React's built-in useDeferredValue because you can set the delay yourself.
-- ✅ <b>useFirstRender:</b> Returns true on first render; false otherwise.
+- ✅ <b>useHasMounted:</b> Tells you if your component has already mounted. Useful for avoid hydration errors. 
 - ✅ <b>useToggle:</b> Provides a boolean toggle that does not persist between page reloads.
 - ✅ <b>useIntersectionObserver:</b> Provides a hook API that wraps the IntersectionObserver API. This hook is for use with a single element only. For
   simplicity this is the recommended approach. If you have an extremely large number of objects to observe and want
@@ -49,3 +49,4 @@ npm install anzol
 - ✅ <b>useClickOutside:</b> Provides a ref to attach to an HTML element and takes a callback function, and calls that
   function when the user clicks anywhere outside the given element.
 - ✅ <b>usePreferredScheme:</b> Listens for changes in the user's preferred scheme and returns it.
+- ✅ <b>useCooldownState:</b> Like useState but allows passing a cooldown period during which state updates are discarded.
