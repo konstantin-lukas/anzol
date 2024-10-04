@@ -58,3 +58,7 @@ export {
     type DarkModeState,
     type DarkModeOptions,
 } from "./hooks/useDarkMode";
+
+export {
+    default as useCooldownState,
+} from "./hooks/useCooldownState";
